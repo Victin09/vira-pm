@@ -1,0 +1,48 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html,
+body,
+#root {
+  height: 100%;
+  background-color: var(--background-primary);
+}
+main {
+  margin-left: 80px;
+}
+:root {
+  --background-primary: #706779;
+  --background-secondary: #8f8698;
+  --background-secondary-alt: #9b91a1;
+
+  --text-primary: white;
+
+  /* Constants */
+  --tidify-logo-height: 100px;
+  --grid-gap: 20px;
+}
+
+// Overwrite variables for react-big-calendar
+$event-bg: #706779;
+$event-border: #706779;
+$event-outline: var(--background-secondary);
+
+$btn-color: white;
+$btn-bg: #8f8698;
+$btn-border: #706779;
+
+$calendar-border: #706779;
+$cell-border: #706779;
+
+$time-selection-bg-color: white;
+$date-selection-bg-color: white;
+
+// Change these 3 variables
+$out-of-range-color: white;
+$out-of-range-bg-color: #c9c1cc;
+$today-highlight-bg: #8c7e9a;
+
+// Import styles
+@import "react-big-calendar/lib/sass/styles";
