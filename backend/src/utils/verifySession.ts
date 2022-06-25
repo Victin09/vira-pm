@@ -5,13 +5,13 @@ export const verifySession = (
   res: Response,
   next: NextFunction
 ): void | Response => {
-  // const user = req.session.user;
+  const user = req.session.user;
   console.log("req.session", req.session);
-  // if (!user) {
+  if (!user) {
   return res
-    .status(401)
+    .status(200)
     .json({ data: null, message: "Please log in!", success: false });
-  // }
+  }
 
   next();
 };

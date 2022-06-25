@@ -1,2 +1,2 @@
 export const BASE_URL =
-  "https://4000-victin09-virapm-3vcum5vtzll.ws-eu49.gitpod.io";
+  "https://victin09-vira-pm-jwj4xqr63qx64-4000.githubpreview.dev";

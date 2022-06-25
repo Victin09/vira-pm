@@ -67,7 +67,7 @@ router.post("/login", async (req: Request, res: Response) => {
   };
 
   // add session
-  // req.session.user = userSession;
+  req.session.user = userSession;
   if (req.sessionID) {
     await redisClient.lpush(
       `${SESSION_USERID_PREFIX}${user.id}`,
@@ -76,7 +76,7 @@ router.post("/login", async (req: Request, res: Response) => {
   }
 
   console.log("req.session.login", req.session);
-  res.cookie("test", userSession, { httpOnly: false });
+  // res.cookie("test", userSession, { httpOnly: false });
   return res.status(200).json({
     data: userSession,
     message: "Successfully logged in!",

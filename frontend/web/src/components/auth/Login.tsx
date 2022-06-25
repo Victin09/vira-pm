@@ -40,13 +40,14 @@ const Login: React.FC<LoginProps> = ({ history }) => {
             }
         },
     });
-
+    
     if (isLoading) return <Loader />;
-
+    
+    console.log('data', data)
     if (data.success) {
         return <Redirect to="/app" />;
     }
-
+    
     return (
         <>
             <Formik

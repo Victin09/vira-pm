@@ -17,6 +17,7 @@ interface Props {
 
 const Navigation: React.FC<Props> = (props) => {
     const { data, isLoading } = useQuery("guilds", getGuilds);
+    console.log('dataNvigation', data)
     const selectedGuild = useSelectedGuild(state => state.selectedGuild);
 
     const disclosure = useDisclosure();
@@ -45,6 +46,7 @@ const Navigation: React.FC<Props> = (props) => {
                 }}
             >
                 <Divider w="80%" />
+
 
                 {!isLoading && data.data.map((guild: GuildAttributes) => (
                     <Guild key={guild.id} guild={guild} isSelected={selectedGuild?.id === guild.id} />

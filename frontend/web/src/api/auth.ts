@@ -1,10 +1,17 @@
+import axios from 'axios'
 import { BASE_URL } from "../constants";
 import { ResetPassword, UserLogin, UserRegister } from "../types";
 
-export const getMe = () =>
-  fetch(`${BASE_URL}/api/v1/users/me`, {
-    credentials: "include",
-  }).then((r) => r.json());
+export const getMe = async () => {
+  const response = await axios.get(`${BASE_URL}/api/v1/users/me`, {withCredentials: true});
+  console.log({ response})
+  return response.data
+}
+
+// export const getMe = () =>
+//   fetch(`${BASE_URL}/api/v1/users/me`, {
+//     credentials: "same-origin",
+//   }).then((r) => r.json());
 
 export const register = async (user: UserRegister) => {
   const response = await fetch(`${BASE_URL}/api/v1/auth/register`, {
@@ -18,14 +25,21 @@ export const register = async (user: UserRegister) => {
 };
 
 export const login = async (user: UserLogin) => {
-  const response = await fetch(`${BASE_URL}/api/v1/auth/login`, {
-    method: "POST",
+  // const response = await fetch(`${BASE_URL}/api/v1/auth/login`, {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify(user),
+  // });
+  // return response.json();
+  const response = await axios.post(`${BASE_URL}/api/v1/auth/login`, {...user}, {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(user),
+    withCredentials: true
   });
-  return response.json();
+  return response.data;
 };
 
 export const confirmCode = async (code: string) => {

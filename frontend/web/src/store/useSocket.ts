@@ -1,6 +1,7 @@
 import { combine } from 'zustand/middleware'
 import create from 'zustand'
 import { io, Socket } from 'socket.io-client'
+import { BASE_URL } from '../constants';
 
 
 export const useSocket = create(
@@ -10,7 +11,7 @@ export const useSocket = create(
         },
         (set, get) => ({
             connect: () => set((state) => {
-                const socket = io("http://localhost:4000/");
+                const socket = io(BASE_URL ? BASE_URL : "http://localhost:4000/");
                 return { socket };
             }),
             disconnect: () => set((state) => {

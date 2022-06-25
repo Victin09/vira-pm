@@ -1,7 +1,9 @@
 import express, { Request, Response } from "express";
 import { createConnection, sequelize } from "./db/connection";
 import { Server } from "http";
+import { createServer } from 'https'
 import cors from "cors";
+import fs from 'fs';
 import morgan from "morgan";
 import dotnev from "dotenv";
 import session from "express-session";
@@ -16,8 +18,6 @@ import { verifySession } from "./utils/verifySession";
 import { requireRoles } from "./utils/requireRoles";
 import { CLIENT_HOST } from "./constants";
 import wsServer from "./api/ws/chat";
-
-import cookieParser from "cookie-parser";
 
 // import Routes
 import { router as userRouter } from "./api/user";
@@ -49,24 +49,24 @@ app.disable("x-powered-by");
 const PORT = process.env.PORT || 4000;
 const API_PREFIX = "/api/v1";
 
-app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(cors({ credentials: true, origin: CLIENT_HOST }));
 app.use(morgan("dev"));
 app.use(express.json());
-// app.use(
-//   session({
-//     store: new RedisStore({ client: redisClient }),
-//     secret: process.env.SESSION_SECRET || "",
-//     resave: false,
-//     saveUninitialized: false,
-//     name: "qid",
-//     cookie: {
-//       httpOnly: true,
-//       secure: false,
-//       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 Days
-//     },
-//   })
-// );
+app.use(
+  session({
+    store: new RedisStore({ client: redisClient }),
+    secret: process.env.SESSION_SECRET || "",
+    resave: false,
+    saveUninitialized: false,
+    name: "qid",
+    cookie: {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 Days
+    },
+  })
+);
 app.use(
   adminBro.options.rootPath,
   verifySession,
@@ -99,7 +99,18 @@ testConnection().then(async () => {
   await sequelize.sync();
 });
 
-const server: Server = app.listen(PORT, () =>
-  console.log(`🚀 Started Server on port ${PORT}`)
+// const server: Server = app.listen(PORT, () =>
+//   console.log(`🚀 Started Server on port ${PORT}`)
+// );
+// wsServer(server);
+
+
+const key = fs.readFileSync('./key.pem');
+const cert = fs.readFileSync('./cert.pem');
+
+const server = createServer({key: key, cert: cert }, app);
+server.listen(PORT, () =>
+  console.log(`🚀 Started HTTPS Server on port ${PORT}`)
 );
 wsServer(server);
+
