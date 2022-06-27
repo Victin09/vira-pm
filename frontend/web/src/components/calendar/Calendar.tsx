@@ -39,7 +39,7 @@ const MyCalendar: React.FC = () => {
                     views={["month", "week"]}
                     startAccessor="start"
                     endAccessor="end"
-                    style={{ height: "100%", width: "100%", color: "white" }}
+                    style={{ height: "100%", width: "100%", color: "#1D1C1B" }}
                 />
             </BoxWrapper>
             <CreateEventModal disclosure={disclosure} currentDate={modalData!} />

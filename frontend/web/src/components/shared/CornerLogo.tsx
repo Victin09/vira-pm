@@ -1,25 +1,25 @@
 import { Image } from "@chakra-ui/image";
 import { Box } from "@chakra-ui/layout";
 import React from "react";
-import Logo from '../../assets/logo.png'
+// import Logo from '../../assets/logo.png'
 
- interface Props {};
+interface Props { };
 
 const CornerLogo: React.FC<Props> = () => {
     return (
-            <Box
-                position="absolute"
-                top="0"
-                left="0"
-                borderRadius="0 0 20px 0"
-                w="auto"
-                h="auto"
-                bg="#706779"
-                p="20px"
-                zIndex="4"
-            >
-                <Image src={Logo} alt="logo" h="60px" w="auto" />
-            </Box>
+        <Box
+            position="absolute"
+            top="0"
+            left="0"
+            w="auto"
+            h="auto"
+            bg="#33344A"
+            color="#EAEAEC"
+            p="20px"
+            zIndex="4"
+        >
+            VM
+        </Box>
     );
 }
 

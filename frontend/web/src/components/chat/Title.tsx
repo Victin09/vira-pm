@@ -1,4 +1,4 @@
-import {Box, Text} from '@chakra-ui/react';
+import { Box, Text } from '@chakra-ui/react';
 import { Hash } from 'react-feather';
 
 export interface Props {
@@ -8,15 +8,15 @@ export interface Props {
 const Title: React.FC<Props> = ({ name }) => {
     return (
         <>
-            <Box 
+            <Box
                 flex="1"
                 borderRadius="10px"
                 bg="var(--background-secondary-alt)"
                 margin="10px"
                 p="10px"
             >
-                <Text fontSize="2xl" color="var(--text-primary)" d="flex" alignItems="center" h="100%" fontWeight="bold">
-                    <Hash color="var(--text-primary)" />{name}
+                <Text fontSize="2xl" color="#1D1C1B" d="flex" alignItems="center" h="100%" fontWeight="bold">
+                    <Hash color="#1D1C1B" />{name}
                 </Text>
 
             </Box>

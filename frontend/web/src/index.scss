@@ -16,9 +16,9 @@ main {
 }
 
 :root {
-  --background-primary: #706779;
-  --background-secondary: #8f8698;
-  --background-secondary-alt: #9b91a1;
+  --background-primary: #DCDAD8;
+  --background-secondary: #504E8F;
+  --background-secondary-alt: #FFFFFF;
 
   --text-primary: white;
 
@@ -28,16 +28,17 @@ main {
 }
 
 // Overwrite variables for react-big-calendar
-$event-bg: #706779;
-$event-border: #706779;
-$event-outline: var(--background-secondary);
+$event-bg: #33344A;
+$event-border: #33344A;
+$event-outline: #33344A;
+// $event-outline: var(--background-secondary);
 
-$btn-color: white;
-$btn-bg: #8f8698;
-$btn-border: #706779;
+$btn-color: #1D1C1B;
+$btn-bg: #504E8F;
+$btn-border: #504E8F;
 
-$calendar-border: #706779;
-$cell-border: #706779;
+$calendar-border: #33344A;
+$cell-border: #504E8F;
 
 $time-selection-bg-color: white;
 $date-selection-bg-color: white;

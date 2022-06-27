@@ -46,7 +46,8 @@ const ChannelSidebar: React.FC<Props> = React.memo(({ history }) => {
                 p="0 0 var(--grid-gap) 0"
             >
                 <Box
-                    bg="var(--background-secondary-alt)"
+                    // bg="var(--background-secondary-alt)"
+                    bg="#F3F2F1"
                     w="250px"
                     h="100%"
                     borderRadius="0 0 10px 10px"
@@ -56,21 +57,21 @@ const ChannelSidebar: React.FC<Props> = React.memo(({ history }) => {
                     sx={{ ...scrollbarStyles }}
                 >
                     <VStack
-                        paddingTop="calc(var(--tidify-logo-height) + 20px)"
+                        // paddingTop="calc(var(--tidify-logo-height) + 20px)"
                         spacing="5px"
-                        p="calc(var(--tidify-logo-height) + 20px) 10px 0 10px"
+                        p="10px 10px 0 10px"
                     >
                         {selectedGuild &&
                             <>
                                 <Box
                                     w="100%"
                                     p="5px"
-                                    border="2px solid var(--background-secondary)"
-                                    borderRadius="5px"
+                                // border="2px solid var(--background-secondary)"
+                                // borderRadius="5px"
                                 >
-                                    <Text fontWeight="bold" fontSize="2xl" color="white" textAlign="center">{selectedGuild!.name}</Text>
+                                    <Text fontWeight="bold" fontSize="2xl" color="#1D1C1B" textAlign="center">{selectedGuild!.name}</Text>
                                 </Box>
-                                <SectionDivider title="Sections" marginTop="0px" />
+                                <SectionDivider title="Sections" marginTop="10px" />
                                 <Section title="Overview" icon={Grid} onClick={() => select('overview')} isSelected={selectedChannel === 'overview'} />
                                 <Section title="Members" icon={Users} onClick={() => select('members')} isSelected={selectedChannel === 'members'} />
                                 <Section title="Calendar" icon={Calendar} onClick={() => select('calendar')} isSelected={selectedChannel === 'calendar'} />
@@ -129,7 +130,7 @@ const TextChannel: React.FC<TextChannelProps> = ({ channel, onClick, isSelected 
     return (
         <Box
             onClick={onClick}
-            bg={isSelected ? "white" : "var(--background-secondary)"}
+            bg={isSelected ? "#33344A" : "#504E8F"}
             borderRadius="5px"
             d="flex"
             justifyContent="flex-start"
@@ -139,7 +140,6 @@ const TextChannel: React.FC<TextChannelProps> = ({ channel, onClick, isSelected 
             transition="transform 100ms ease-in-out"
             sx={{
                 "&:hover": {
-                    bg: "white",
                     cursor: 'pointer',
                     transform: "scale(1.025)"
                 },
@@ -171,7 +171,7 @@ const Section: React.FC<SectionProps> = React.memo(({ icon: Icon, title, onClick
     return (
         <Box
             onClick={onClick}
-            bg={isSelected ? "white" : "var(--background-secondary)"}
+            bg={isSelected ? "#33344A" : "#504E8F"}
             opacity={disabled ? 0.4 : undefined}
             box-shadow={disabled ? "var(--chakra-shadows-none)" : undefined}
             borderRadius="5px"
@@ -181,9 +181,10 @@ const Section: React.FC<SectionProps> = React.memo(({ icon: Icon, title, onClick
             p="8px"
             w="100%"
             transition="transform 100ms ease-in-out"
+            color="#EAEAEC"
             sx={{
                 "&:hover": {
-                    bg: "white",
+                    // bg: "white",
                     cursor: `${disabled ? "not-allowed" : "pointer"}`,
                     transform: "scale(1.02)"
                 },
@@ -221,7 +222,7 @@ const SectionDivider: React.FC<SectionDividerProps> = ({ icon: Icon, title, marg
             w="100%"
             marginTop={marginTop || "20px"}
         >
-            <Text color="white" fontWeight="bold" fontSize="sm" textTransform="uppercase">{title}</Text>
+            <Text color="#767472" fontWeight="bold" fontSize="sm" textTransform="uppercase">{title}</Text>
             {Icon && <IconWrapper icon={Icon} tooltip={{ label: "Create Channel", placement: "top" }} p="0" onClick={onClick} />}
         </Box>
     );

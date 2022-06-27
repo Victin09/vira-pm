@@ -27,16 +27,16 @@ const MembersTable: React.FC<Props> = () => {
 
     return (
         <>
-            <Table color="white">
+            <Table color="#1D1C1B" bg="#FFFFFF" borderRadius="10px">
                 <Thead>
                     <Tr borderColor="var(--background-secondary)">
-                        <Th w="10%" color="var(--background-primary)">
+                        <Th w="10%" color="#1D1C1B">
                             Avatar
-						</Th>
-                        <Th color="var(--background-primary)">Name</Th>
-                        <Th color="var(--background-primary)">Last online</Th>
-                        <Th color="var(--background-primary)">Joined</Th>
-                        <Th color="var(--background-primary)">Role</Th>
+                        </Th>
+                        <Th color="#1D1C1B">Name</Th>
+                        <Th color="#1D1C1B">Last online</Th>
+                        <Th color="#1D1C1B">Joined</Th>
+                        <Th color="#1D1C1B">Role</Th>
                     </Tr>
                 </Thead>
                 <Tbody>

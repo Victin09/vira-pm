@@ -23,11 +23,11 @@ const MessageBox: React.FC<Props> = ({ username, createdAt, content }) => {
                 >
                     <HStack
                     >
-                        <Text color="white" fontWeight="bold">{username}</Text>
-                        <Text color="white">·</Text>
-                        <Text color="white" fontSize="12px">{createdAt}</Text>
+                        <Text color="#1D1C1B" fontWeight="bold">{username}</Text>
+                        <Text color="#1D1C1B">·</Text>
+                        <Text color="#1D1C1B" fontSize="12px">{createdAt}</Text>
                     </HStack>
-                    <Text color="white">{content}</Text>
+                    <Text color="#1D1C1B">{content}</Text>
                 </VStack>
             </HStack>
         </>

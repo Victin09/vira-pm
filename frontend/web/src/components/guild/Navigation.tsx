@@ -34,9 +34,9 @@ const Navigation: React.FC<Props> = (props) => {
                 position="fixed"
                 h="100vh"
                 w="70px"
-                bg="#706779"
+                bg="#33344A"
                 spacing="10px"
-                paddingTop="var(--tidify-logo-height)"
+                paddingTop="4em"
                 paddingBottom="var(--grid-gap)"
                 overflow="auto"
                 sx={{
@@ -70,19 +70,18 @@ const Guild: React.FC<GuildProps> = ({ guild, isSelected }) => {
     const select = useSelectedGuild(state => state.select);
     const selectChannel = useSelectedChannel(state => state.select);
     return (
-        <Tooltip label={guild.name} placement="right" gutter={16} bg="var(--background-primary)">
+        <Tooltip label={guild.name} placement="right" gutter={16} bg="#EAEAEC" color="#767472">
             <Box
                 w="50px"
                 h="50px"
                 minHeight="50px"
                 borderRadius="10px"
                 zIndex="6"
-                bg={!isSelected ? "#9B91A1" : "white"}
+                bg={!isSelected ? "#504E8F" : "#504E8F"}
                 cursor={!isSelected ? undefined : 'pointer'}
                 transition="all 200ms ease"
                 sx={{
                     "&:hover": {
-                        bg: 'white',
                         cursor: 'pointer',
                         transform: 'scale(1.1)'
                     },
@@ -96,7 +95,7 @@ const Guild: React.FC<GuildProps> = ({ guild, isSelected }) => {
                 }}
             >
                 <Center>
-                    <Text fontWeight="bold" color={!isSelected ? "white" : "var(--background-secondary)"} fontSize="xl" className="guild-text">{guild.name[0].toUpperCase()}</Text>
+                    <Text fontWeight="bold" color={!isSelected ? "#EAEAEC" : "#EAEAEC"} fontSize="xl" className="guild-text">{guild.name[0].toUpperCase()}</Text>
                 </Center>
             </Box>
         </Tooltip>
@@ -109,7 +108,7 @@ type GuildAddButtonProps = {
 
 const GuildAddButton: React.FC<GuildAddButtonProps> = ({ onClick }) => {
     return (
-        <Tooltip label="New Guild" placement="right" hasArrow gutter={16} bg="var(--background-primary)">
+        <Tooltip label="New Guild" placement="right" hasArrow gutter={16} bg="#EAEAEC" color="#767472">
             <Box
                 onClick={onClick}
                 w="50px"
@@ -117,11 +116,10 @@ const GuildAddButton: React.FC<GuildAddButtonProps> = ({ onClick }) => {
                 minHeight="50px"
                 borderRadius="10px"
                 zIndex="6"
-                bg="#9B91A1"
+                bg="#504E8F"
                 transition="all 200ms ease"
                 sx={{
                     "&:hover": {
-                        bg: 'white',
                         cursor: 'pointer',
                         transform: 'scale(1.1)'
                     },
@@ -136,7 +134,7 @@ const GuildAddButton: React.FC<GuildAddButtonProps> = ({ onClick }) => {
                     w="100%"
                     h="100%"
                 >
-                    <Plus color="white" id="plus-icon" />
+                    <Plus color="#EAEAEC" id="plus-icon" />
                 </Flex>
             </Box>
         </Tooltip>

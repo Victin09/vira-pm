@@ -18,23 +18,23 @@ const Members: React.FC<Props> = ({ memberCount }) => {
                     justifyContent="space-between"
                     w="100%"
                 >
-                    <HStack>
+                    <HStack bg="#FFFFFF" borderRadius="10px" padding="10px">
                         <InputGroup>
                             <InputLeftElement
                                 pointerEvents="none"
-                                children={<Search color="white" />}
+                                children={<Search color="#1D1C1B" />}
                             />
                             <Input type="text" placeholder="Seach"
                                 sx={{
                                     "&::-webkit-input-placeholder": {
-                                        color: 'white'
+                                        color: '#1D1C1B'
                                     }
                                 }}
                             />
                         </InputGroup>
                         <HStack>
-                            <Text color="white" fontSize="16px">{memberCount}</Text>
-                            <Text color="white" fontSize="16px">{memberCount > 1 ? "members" : "member"}</Text>
+                            <Text color="#1D1C1B" fontSize="16px">{memberCount}</Text>
+                            <Text color="#1D1C1B" fontSize="16px">{memberCount > 1 ? "members" : "member"}</Text>
                         </HStack>
                     </HStack>
                     <Button>Invite</Button>

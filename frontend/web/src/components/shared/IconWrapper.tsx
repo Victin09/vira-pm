@@ -19,8 +19,9 @@ const IconWrapper: React.FC<IconWrapper> = ({ icon: Icon, tooltip, p, onClick, w
         p={p || '3px'}
         sx={{
             "&:hover": {
-                bg: 'var(--background-secondary)',
-                borderRadius: '5px',
+                // bg: 'var(--background-secondary)',
+                color: "#33344A",
+                // borderRadius: '5px',
                 cursor: 'pointer'
             }
         }}
@@ -29,14 +30,14 @@ const IconWrapper: React.FC<IconWrapper> = ({ icon: Icon, tooltip, p, onClick, w
         alignItems="center"
         onClick={onClick}
     >
-        <Icon color="var(--text-primary)" width={w || '24px'} height={h || '24px'} />
+        <Icon color="#504E8F" width={w || '24px'} height={h || '24px'} />
 
     </Box>);
     return (
         <>
             {tooltip
                 ?
-                <Tooltip hasArrow label={tooltip.label} placement={tooltip.placement} bg="var(--background-primary)">
+                <Tooltip hasArrow label={tooltip.label} placement={tooltip.placement} bg="var(--background-primary)" color="#767472">
                     {WrappedIcon}
                 </Tooltip>
                 :

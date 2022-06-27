@@ -11,7 +11,7 @@ const BoxWrapper: React.FC<IBoxWrapperProps> = ({ children }) => {
         >
             <Box
                 h="100%"
-                bg="var(--background-secondary-alt)"
+                // bg="var(--background-secondary-alt)"
                 p="20px"
                 borderRadius="10px"
             >

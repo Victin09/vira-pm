@@ -5,7 +5,7 @@ import { getMembers } from "../../api/guild";
 import { useSelectedGuild } from "../../store/useSelectedGuild";
 import { useQuery } from "react-query";
 
-interface Props {}
+interface Props { }
 
 const Members: React.FC<Props> = (props) => {
 	const selectedGuild = useSelectedGuild((state) => state.selectedGuild);
@@ -52,13 +52,13 @@ const MemberSubList: React.FC<MemberSubListProps> = ({ title, children }) => {
 	return (
 		<VStack
 			h="auto"
-			bg="var(--background-secondary)"
+			// bg="var(--background-secondary)"
 			borderRadius="10px"
 			w="100%"
 			p="5px"
 		>
 			<Text
-				color="white"
+				color="#1D1C1B"
 				textAlign="start"
 				w="100%"
 				paddingRight="5px"
@@ -83,19 +83,22 @@ const MemberItem: React.FC<MemberItemProps> = ({ name }) => {
 			justifyContent="flex-start"
 			w="100%"
 			p="5px"
+			borderRadius="10px"
+			bg="#504E8F"
 			sx={{
 				"&:hover": {
-					bg: "var(--background-secondary-alt)",
-					borderRadius: "10px",
+					// bg: "var(--background-secondary-alt)",
+					// borderRadius: "10px",
 					cursor: "pointer",
 				},
-			}}
+			}
+			}
 		>
 			<Avatar size="sm" />
 			<Text color="var(--text-primary)" fontWeight="bold">
 				{name}
 			</Text>
-		</HStack>
+		</HStack >
 	);
 };
 
