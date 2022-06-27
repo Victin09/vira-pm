@@ -2,12 +2,11 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import React from "react";
 import BoxWrapper from "../shared/BoxWrapper";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { createEvent, getEvents } from "../../api/event";
+import { useQuery } from "react-query";
+import { getEvents } from "../../api/event";
 import { useSelectedGuild } from "../../store/useSelectedGuild";
 import { useDisclosure } from "@chakra-ui/hooks";
 import CreateEventModal from "./CreateEventModal";
-import Button from "../../ui/Button";
 
 const localizer = momentLocalizer(moment);
 
@@ -28,6 +27,8 @@ const MyCalendar: React.FC = () => {
         setModalData(currentDate);
         onOpen();
     };
+
+    console.log({ data })
 
     return (
         <>

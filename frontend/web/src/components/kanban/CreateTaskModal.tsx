@@ -76,8 +76,8 @@ const CreateTaskModal: React.FC<Props> = ({ onClose, column }) => {
         <>
             <Modal isOpen={!!column} onClose={onClose} isCentered >
                 <ModalOverlay />
-                <ModalContent bg="var(--background-secondary)">
-                    <ModalHeader color="white">Create new Task</ModalHeader>
+                <ModalContent bg="#FFFFFF">
+                    <ModalHeader color="#1D1C1B">Create new Task</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody
                         paddingBottom="24px"
@@ -108,13 +108,13 @@ const CreateTaskModal: React.FC<Props> = ({ onClose, column }) => {
                                     <Button
                                         w="100%"
                                         mt={4}
-                                        bg="var(--background-secondary-alt)"
+                                        bg="var(--background-secondary)"
                                         isLoading={isSubmitting}
                                         type="submit"
                                         color="var(--text-primary)"
                                     >
                                         Submit
-                                </Button>
+                                    </Button>
                                 </Form>
                             )}
                         </Formik>

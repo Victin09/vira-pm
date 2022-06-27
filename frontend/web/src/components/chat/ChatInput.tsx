@@ -87,7 +87,7 @@ const ChatInput: React.FC<Props> = () => {
             >
                 <Box w="100%">
                     <Box
-                        bg="var(--background-secondary)"
+                        bg="#DCDAD8"
                         borderRadius="10px"
                         d="flex"
                         alignItems="center"
@@ -126,10 +126,11 @@ const ChatInput: React.FC<Props> = () => {
                                     setValue("");
                                 }
                             }}
+                            color="#DCDAD8"
                             placeholder="Enter a Text"
                         />
                         <Flex>
-                            <Smile color="white" />
+                            <Smile color="#DCDAD8" />
                         </Flex>
                     </Box>
                 </Box>
@@ -140,12 +141,12 @@ const ChatInput: React.FC<Props> = () => {
 
 const FormInput: React.FC<InputProps> = (props) => {
     return (
-        <Input {...props} outline="none" boxShadow="none" border="none" bg="transparent" color="var(--text-primary)" focusBorderColor="transparent" 
-        sx={{
-            "&::-webkit-input-placeholder": {
-                color: 'white'
-            }
-        }}
+        <Input {...props} outline="none" boxShadow="none" border="none" bg="transparent" color="var(--text-primary)" focusBorderColor="transparent"
+            sx={{
+                "&::-webkit-input-placeholder": {
+                    color: 'white'
+                }
+            }}
         />
     )
 }

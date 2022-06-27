@@ -112,15 +112,15 @@ const KanbanBoard: React.FC<Props> = ({ board }) => {
 			);
 
 			/*setColumns(prev => {
-                return prev.map(item => {
-                    if (item.id.toString() === source.droppableId) {
-                        return { ...sourceCol, tasks: resultFromMove[source.droppableId] }
-                    } else if (item.id.toString() === destination.droppableId) {
-                        return { ...destCol, tasks: resultFromMove[destination.droppableId] }
-                    }
-                    return item;
-                })
-            })*/
+								return prev.map(item => {
+										if (item.id.toString() === source.droppableId) {
+												return { ...sourceCol, tasks: resultFromMove[source.droppableId] }
+										} else if (item.id.toString() === destination.droppableId) {
+												return { ...destCol, tasks: resultFromMove[destination.droppableId] }
+										}
+										return item;
+								})
+						})*/
 		}
 	};
 	return (
@@ -132,12 +132,12 @@ const KanbanBoard: React.FC<Props> = ({ board }) => {
 							<Text
 								fontSize="2xl"
 								fontWeight="bold"
-								color="var(--text-primary)"
+								color="#1D1C1B"
 							>
 								{board.title}
 							</Text>
 						</Flex>
-						<Divider />
+						<Divider color="#1D1C1B" bg="#1D1C1B" />
 						<Button onClick={() => setBoard(board)}>Create new Column</Button>
 						<HStack alignItems="flex-start" w="100%" spacing={5}>
 							{data &&
@@ -172,7 +172,7 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({ column }) => {
 			<Box
 				w="280px"
 				h="auto"
-				bg="var(--background-secondary)"
+				bg="#FFFFFF"
 				borderRadius="10px"
 			>
 				<Box>
@@ -186,7 +186,7 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({ column }) => {
 						spacing={2}
 					>
 						<Flex justifyContent="space-between" alignItems="center" h="100%">
-							<Text color="white" fontWeight="bold">
+							<Text color="#1D1C1B" fontWeight="bold">
 								{name}
 							</Text>
 							<Center
@@ -211,7 +211,7 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({ column }) => {
 								provided: DroppableProvided,
 								snapshot: DroppableStateSnapshot
 							) => (
-								<VStack ref={provided.innerRef} {...provided.droppableProps}>
+								<VStack ref={provided.innerRef} {...provided.droppableProps} color="#1D1C1B">
 									{tasks &&
 										tasks.length !== 0 &&
 										tasks.map((item, i) => (
@@ -275,7 +275,7 @@ const KanbanTask: React.FC<KanbanTaskProps> = ({
 					</Text>
 					<Avatar size="sm" />
 				</Flex>
-				<Text fontSize="md" color="white" textAlign="start" w="100%">
+				<Text fontSize="md" color="#1D1C1B" textAlign="start" w="100%">
 					{content}
 				</Text>
 				<Flex

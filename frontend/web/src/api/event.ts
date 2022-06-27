@@ -5,6 +5,10 @@ import { BASE_URL } from "../constants";
 export const getEvents = async (guildId?: number) => {
     if (!guildId) return;
     const response = await axios.get(`${BASE_URL}/api/v1/guilds/${guildId}/events`, { withCredentials: true });
+    response.data.data.forEach((element: any) => {
+        element.start = new Date(element.start)
+        element.end = new Date(element.end)
+    })
     return response.data;
     // const response = await fetch(`${BASE_URL}/api/v1/guilds/${guildId}/events`);
     // return response.json();

@@ -316,7 +316,7 @@ router.post("/:guildId/boards", async (req: Request, res: Response) => {
  */
 router.post(
   "/:guildId/boards/:boardId",
-  async (req: Request, res: Response) => {}
+  async (req: Request, res: Response) => { }
 );
 
 /**
@@ -325,7 +325,7 @@ router.post(
  */
 router.delete(
   "/:guildId/boards/:bordId",
-  async (req: Request, res: Response) => {}
+  async (req: Request, res: Response) => { }
 );
 
 // Announcements
@@ -336,7 +336,7 @@ router.delete(
  */
 router.get(
   "/:guildId/announcements",
-  async (req: Request, res: Response) => {}
+  async (req: Request, res: Response) => { }
 );
 
 /**
@@ -345,7 +345,7 @@ router.get(
  */
 router.post(
   "/:guildId/announcements",
-  async (req: Request, res: Response) => {}
+  async (req: Request, res: Response) => { }
 );
 
 /**
@@ -354,7 +354,7 @@ router.post(
  */
 router.post(
   "/:guildId/announcements/:announcementId",
-  async (req: Request, res: Response) => {}
+  async (req: Request, res: Response) => { }
 );
 
 /**
@@ -363,7 +363,7 @@ router.post(
  */
 router.delete(
   "/:guildId/announcements/:announcementId",
-  async (req: Request, res: Response) => {}
+  async (req: Request, res: Response) => { }
 );
 
 /**

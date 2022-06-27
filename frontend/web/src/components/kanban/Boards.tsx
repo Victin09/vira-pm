@@ -57,7 +57,7 @@ const BoardBox: React.FC<BoardBox> = ({ title, onClick }) => {
                 onClick={onClick}
                 w="150px"
                 h="100px"
-                bg="var(--background-primary)"
+                bg="#FFFFFF"
                 borderRadius="10px"
                 transition="all 200ms ease-in-out"
                 sx={{
@@ -67,7 +67,7 @@ const BoardBox: React.FC<BoardBox> = ({ title, onClick }) => {
                     }
                 }}
             >
-                <Text color="white" fontWeight="bold">{title}</Text>
+                <Text color="#1D1C1B" fontWeight="bold">{title}</Text>
             </Center>
         </>
     );
