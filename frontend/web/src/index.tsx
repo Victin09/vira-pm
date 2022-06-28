@@ -5,7 +5,8 @@ import App from "./App";
 import { ChakraProvider } from "@chakra-ui/react"
 import { QueryCache, QueryClient, QueryClientProvider } from "react-query";
 
-import "./index.scss";
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import "./index.css";
 
 const queryCache = new QueryCache();
 
@@ -15,7 +16,7 @@ const queryClient = new QueryClient({
 			refetchOnWindowFocus: false,
 		},
 	},
-    queryCache
+	queryCache
 });
 
 ReactDOM.render(

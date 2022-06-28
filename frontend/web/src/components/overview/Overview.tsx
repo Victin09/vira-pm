@@ -1,25 +1,38 @@
-import { Text } from '@chakra-ui/react';
-import { Flex } from "@chakra-ui/layout";
 import React from "react";
-import BoxWrapper from "../shared/BoxWrapper";
+import styled from 'styled-components';
 import Members from "../shared/Members";
 import { useSelectedGuild } from '../../store/useSelectedGuild';
+// import Card from "../shared/Card";
 
-interface Props { }
+const OverviewWrapper = styled.div`
+	display: flex;
+	height: 100%;
+	width: 100%;
+`
 
-const Overview: React.FC<Props> = () => {
+const OverviewText = styled.span`
+	padding: 1em;
+	font-weight: bold;
+	font-size: x-large;
+`
+
+const Overview: React.FC = () => {
 	const selectedGuild = useSelectedGuild(state => state.selectedGuild);
+	const options = ['overview', 'members', 'calendar', 'kanban']
 	return (
-		<>
-			<Flex w="100%" h="100%">
-				<Flex flex="4" h="100%" w="100%" flexDirection="column" p="10px">
-					{selectedGuild && <BoxWrapper>
-						<Text fontWeight="bold" fontSize="3xl" color="#1D1C1B">Welcome to {selectedGuild?.name}</Text>
-					</BoxWrapper>}
-				</Flex>
-				<Members />
-			</Flex>
-		</>
+		<OverviewWrapper>
+			<OverviewWrapper>
+				{selectedGuild &&
+					<OverviewText>Bienvenido a {selectedGuild?.name}</OverviewText>
+				}
+				{
+					// options.map((option, index) => (
+					// 	// <Card>{option}</Card>
+					// ))
+				}
+			</OverviewWrapper>
+			<Members />
+		</OverviewWrapper>
 	);
 };
 

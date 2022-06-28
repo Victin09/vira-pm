@@ -1,5 +1,4 @@
 import { GuildAttributes } from "@tidify/common";
-import styled from "styled-components";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getGuilds } from "../../api/guild";
@@ -7,52 +6,14 @@ import CreateGuildModal from './CreateGuildModal';
 import { useSelectedGuild } from "../../store/useSelectedGuild";
 import { useSelectedChannel } from "../../store/useSelectedChannel";
 import { useMe } from "../../hooks/useMe";
-import { HStack, VStack, Text } from "@chakra-ui/react";
-import { LogOut, Settings } from 'react-feather';
-import IconWrapper from "../shared/IconWrapper";
 import { logout } from "../../api/auth";
 import { useHistory } from "react-router-dom";
-import { Avatar } from "../shared/Avatar";
-
-const SidenavContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100vh;
-  width: 5em;
-  /* position: fixed; */
-  background-color: #33344A;
-`
-
-const SidenavLogo = styled.span`
-  padding: 1em;
-  font-size: larger;
-  font-weight: bold;
-  color: #FFFFFF;
-`;
-
-const SidenavUser = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  bottom: 0;
-  position: absolute;
-  margin-bottom: .25em;
-`;
-
-const SidenavUserText = styled.span`
-  font-weight: 600;
-  color: #FFFFFF;
-`
-
-const SidenavUserIcons = styled.div`
-  display: flex;
-`
+import { AiFillAppstore, AiOutlinePlus } from 'react-icons/ai'
 
 const Navigation: React.FC = () => {
   const { data, isLoading } = useQuery("guilds", getGuilds);
   const selectedGuild = useSelectedGuild(state => state.selectedGuild);
+  const { select } = useSelectedChannel()
   const [displayCreateGuildModal, setDisplayCreateGuildModal] = useState<boolean>(false)
   const { data: userData } = useMe()
   const mutation = useMutation(logout);
@@ -71,23 +32,32 @@ const Navigation: React.FC = () => {
 
   return (
     <>
-      <SidenavContainer>
-        <SidenavLogo>VM</SidenavLogo>
+      <div className="flex flex-col items-center content-center w-20 h-full bg-base-200">
+        <span className="p-2 font-bold text-2xl ">VM</span>
 
         {!isLoading && data.data.map((guild: GuildAttributes) => (
           <Guild key={guild.id} guild={guild} isSelected={selectedGuild?.id === guild.id} />
         ))}
+        {/* <GuildAddButton onClick={() => setDisplayCreateGuildModal(true)} /> */}
         <GuildAddButton onClick={() => setDisplayCreateGuildModal(true)} />
 
-        <SidenavUser>
-          <Avatar>{userData.data.username}</Avatar>
-          <SidenavUserText>{!isLoading && userData.data.username}</SidenavUserText>
+        <div className="flex flex-col absolute bottom-0 mb-1">
+          <div className="dropdown dropdown-right dropdown-end">
+            <label tabIndex={0} className="btn btn-primary m-1"><AiFillAppstore /></label>
+            <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+              <li><a onClick={() => select('members')}>Usuarios</a></li>
+              <li><a onClick={() => select('calendar')}>Calendario</a></li>
+              <li><a onClick={() => select('kanban')}>Kanban</a></li>
+            </ul>
+          </div>
+          <span className="font-semibold">{userData.data.username}</span>
+          {/* <SidenavUserText>{!isLoading && userData.data.username}</SidenavUserText>
           <SidenavUserIcons>
             <IconWrapper icon={LogOut} tooltip={{ label: "Logout", placement: "top" }} h="17px" w="17px" onClick={handleLogout} />
             <IconWrapper icon={Settings} tooltip={{ label: "Settings", placement: "top" }} h="17px" w="17px" />
-          </SidenavUserIcons>
-        </SidenavUser>
-      </SidenavContainer>
+          </SidenavUserIcons> */}
+        </div>
+      </div>
       <CreateGuildModal showModal={displayCreateGuildModal} setShowModal={handleAddGuild} />
     </>
   );
@@ -100,41 +70,19 @@ type GuildProps = {
   isSelected: boolean;
 }
 
-const GuidWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #504E8F;
-  color: #FFFFFF;
-  border-radius: 10px;
-  padding: .5em;
-  width: 3em;
-  margin: .25em;
-
-  &:hover {
-    cursor: pointer;
-    transform: scale(1.1)
-  }
-`
-
-const GuildText = styled.span`
-  font-weight: bold;
-  color: #FFFFFF;
-  font-size: larger;
-`
-
 const Guild: React.FC<GuildProps> = ({ guild, isSelected }) => {
   const select = useSelectedGuild(state => state.select);
   const selectChannel = useSelectedChannel(state => state.select);
   return (
-    <GuidWrapper
+    <div
+      className="btn btn-primary w-12 mt-1 flex items-center justify-center p-2 cursor-pointer hover:scale-110"
       onClick={() => {
         selectChannel("overview");
         select(guild)
       }}
     >
-      <GuildText>{guild.name[0].toUpperCase()}</GuildText>
-    </GuidWrapper>
+      <span className="font-semibold text-white">{guild.name[0].toUpperCase()}</span>
+    </div>
   );
 }
 
@@ -144,13 +92,7 @@ type GuildAddButtonProps = {
 
 const GuildAddButton: React.FC<GuildAddButtonProps> = ({ onClick }) => {
   return (
-    <GuidWrapper
-      onClick={onClick}
-    >
-      <GuildText>
-        +
-      </GuildText>
-    </GuidWrapper>
+    <label htmlFor="createGuildModal" className="modal-button btn btn-primary w-12 mt-1 flex items-center justify-center p-2 cursor-pointer hover:scale-110"><AiOutlinePlus /></label>
   );
 }
 

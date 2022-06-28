@@ -25,3 +25,11 @@
 3. User fetches all messsages
 4. If user sends a message, send it to the room
 5. listen for the room
+
+
+# Colors
+--light-cornflower-blue: #8ecae6ff;
+--blue-green: #219ebcff;
+--prussian-blue: #023047ff;
+--selective-yellow: #ffb703ff;
+--tangerine: #fb8500ff;
