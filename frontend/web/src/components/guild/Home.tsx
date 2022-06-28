@@ -14,46 +14,52 @@ import shallow from "zustand/shallow";
 import Overview from "../overview/Overview";
 import Boards from "../kanban/Boards";
 import { History } from 'history';
+import styled from "styled-components";
 
 interface Props {
-    history: History;
+  history: History;
 }
 
+const HomeWrapper = styled.div`
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+`
+
 const Home: React.FC<Props> = ({ history }) => {
-    const selectedChannel = useSelectedChannel((state) => state.selectedChannel);
-    const { connect, disconnect } = useSocket(
-        (state) => ({ connect: state.connect, disconnect: state.disconnect }),
-        shallow
-    );
+  const selectedChannel = useSelectedChannel((state) => state.selectedChannel);
+  const { connect, disconnect } = useSocket(
+    (state) => ({ connect: state.connect, disconnect: state.disconnect }),
+    shallow
+  );
 
-    React.useEffect(() => {
-        const invite = new URLSearchParams(history.location.search).get("invite");
-        if (invite) {
+  React.useEffect(() => {
+    const invite = new URLSearchParams(history.location.search).get("invite");
+    if (invite) {
 
-        }
-        connect();
+    }
+    connect();
 
-        return () => disconnect();
-    }, []);
+    return () => disconnect();
+  }, []);
 
-    const currentView = () => {
-        if (selectedChannel === "overview") return <Overview />;
-        if (selectedChannel === "members") return <Members memberCount={1} />;
-        if (selectedChannel === "calendar") return <Calendar />;
-        if (selectedChannel === "kanban") return <Boards />;
-        return <Chat />;
-    };
+  const currentView = () => {
+    if (selectedChannel === "overview") return <Overview />;
+    if (selectedChannel === "members") return <Members memberCount={1} />;
+    if (selectedChannel === "calendar") return <Calendar />;
+    if (selectedChannel === "kanban") return <Boards />;
+    return <Chat />;
+  };
 
-    return (
-        <>
-            <LogoOverlay />
-            <Navigation />
-            <Layout>
-                <ChannelSidebar />
-                {currentView()}
-            </Layout>
-        </>
-    );
+  return (
+    <HomeWrapper>
+      <Navigation />
+      <Layout>
+        {/* <ChannelSidebar /> */}
+        {currentView()}
+      </Layout>
+    </HomeWrapper>
+  );
 };
 
 export default Home;

@@ -1,4 +1,3 @@
-import { useQuery } from "react-query";
 import React from "react";
 import { Redirect, RouteProps, Route } from "react-router-dom";
 import Loader from "../shared/Loader";
@@ -9,12 +8,11 @@ interface Props extends RouteProps {
 }
 
 const PrivateRoute: React.FC<Props> = ({ excludedRoles, ...rest }) => {
-  const { data, isLoading } = useMe();
+  const { data, isLoading, isFetching } = useMe();
   // request to `/api/v1/users/me`
   if (isLoading) {
     return <Loader />;
   }
-  console.log("data", data);
   if (!data.success) {
     return <Redirect to="/auth/login" />;
   }

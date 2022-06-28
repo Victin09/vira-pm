@@ -3,8 +3,8 @@ import { BASE_URL } from "../constants";
 import { ResetPassword, UserLogin, UserRegister } from "../types";
 
 export const getMe = async () => {
-  const response = await axios.get(`${BASE_URL}/api/v1/users/me`, {withCredentials: true});
-  console.log({ response})
+  const response = await axios.get(`${BASE_URL}/api/v1/users/me`, { withCredentials: true });
+  console.log({ response })
   return response.data
 }
 
@@ -33,7 +33,7 @@ export const login = async (user: UserLogin) => {
   //   body: JSON.stringify(user),
   // });
   // return response.json();
-  const response = await axios.post(`${BASE_URL}/api/v1/auth/login`, {...user}, {
+  const response = await axios.post(`${BASE_URL}/api/v1/auth/login`, { ...user }, {
     headers: {
       "Content-Type": "application/json",
     },
