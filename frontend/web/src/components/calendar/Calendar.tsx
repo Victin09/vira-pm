@@ -111,11 +111,15 @@ const MyCalendar: React.FC = () => {
     );
     const [modalData, setModalData] = React.useState<Date | null>(null);
 
+
+    /**
+    * TODO: Fix dates
+    */
     const eventPropGetter = useCallback(
         (event, start, end, isSelected) => (
             {
                 ...({
-                    className: 'bg-primary'
+                    className: 'bg-primary rounded'
                 }),
                 ...(moment(start).hour() <= 1 && {
                     className: 'bg-warning',
@@ -125,7 +129,7 @@ const MyCalendar: React.FC = () => {
                 }),
                 ...(isSelected && {
                     // set bg-info to important
-                    className: 'text-primary bg-info',
+                    className: 'bg-info outline-1',
                 }),
             }),
         []
