@@ -1,42 +1,55 @@
 import { useSelectedChannel } from "../../store/useSelectedChannel";
 import Chat from "../chat/Chat";
 import Layout from "../shared/Layout";
-import ChannelSidebar from "./ChannelSidebar";
 import Navigation from "./Navigation";
 import Calendar from "../calendar/Calendar";
 import Members from "../members/Members";
-import KanbanBoard from "../kanban/KanbanBoard";
-import React from "react";
-import LogoOverlay from "../animations/LogoOverlay";
-import { ChannelAttributes } from "@tidify/common";
+import React, { useEffect, useState } from "react";
 import { useSocket } from "../../store/useSocket";
 import shallow from "zustand/shallow";
 import Overview from "../overview/Overview";
 import Boards from "../kanban/Boards";
-import { History } from 'history';
-import styled from "styled-components";
+import { useMutation } from "react-query";
+import { acceptGuildInvite } from "../../api/guild";
+import { useSearchParams } from "react-router-dom";
 
-interface Props {
-  history: History;
-}
-
-const HomeWrapper = styled.div`
-  display: flex;
-  width: 100vw;
-  height: 100vh;
-`
-
-const Home: React.FC<Props> = ({ history }) => {
-  const selectedChannel = useSelectedChannel((state) => state.selectedChannel);
+const Home: React.FC = () => {
+  const [searchParams, setSearchParams] = useSearchParams()
+  const { select, selectedChannel } = useSelectedChannel();
   const { connect, disconnect } = useSocket(
     (state) => ({ connect: state.connect, disconnect: state.disconnect }),
     shallow
   );
+  const [errorMessage, setErrorMessage] = useState<string>('')
+  const mutation = useMutation(acceptGuildInvite, {
+    onSuccess: (data) => {
+      if (data.success) {
+        select('overview')
+      } else {
+        switch (data.message) {
+          case 'Link is expired!':
+            setErrorMessage('La invitación ha caducado')
+            break;
+          case 'You are already in the guild!':
+            setErrorMessage('Ya tienes acceso a este proyecto')
+            select('overview')
+            break;
+          default:
+            break;
+        }
+      }
+    }
+  })
 
-  React.useEffect(() => {
-    const invite = new URLSearchParams(history.location.search).get("invite");
+
+  useEffect(() => {
+    const invite = searchParams.get("invite");
     if (invite) {
-
+      mutation.mutate(invite)
+      searchParams.delete('invite')
+      setSearchParams(searchParams, {
+        replace: true
+      })
     }
     connect();
 
@@ -44,6 +57,7 @@ const Home: React.FC<Props> = ({ history }) => {
   }, []);
 
   const currentView = () => {
+    console.log('currentView', selectedChannel)
     if (selectedChannel === "overview") return <Overview />;
     if (selectedChannel === "members") return <Members memberCount={1} />;
     if (selectedChannel === "calendar") return <Calendar />;
@@ -52,13 +66,25 @@ const Home: React.FC<Props> = ({ history }) => {
   };
 
   return (
-    <HomeWrapper>
+    <div className="flex w-full h-full">
+      {errorMessage && (
+        <div className="alert shadow-lg absolute z-50 w-3/4 right-2 mt-2 bg-error">
+          <div>
+            <div>
+              <h3 className="font-bold mb-1">{errorMessage}</h3>
+            </div>
+          </div>
+          <div className="flex-none">
+            <button className="btn btn-sm" onClick={() => setErrorMessage('')}>X</button>
+          </div>
+        </div>
+      )}
       <Navigation />
       <Layout>
         {/* <ChannelSidebar /> */}
         {currentView()}
       </Layout>
-    </HomeWrapper>
+    </div>
   );
 };
 

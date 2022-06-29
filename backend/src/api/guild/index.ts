@@ -41,27 +41,31 @@ router.post("/invites/info", async (req: Request, res: Response) => {
  * @routeparam {number} :guildId is the unique id for guilds.
  * @bodyparam {string} token is the unique token for an invite
  */
-router.post("/:guildId/join", async (req: Request, res: Response) => {
-  const guildId = req.params.guildId;
+router.post("/join", async (req: Request, res: Response) => {
+  // const guildId = req.params.guildId;
   const token = req.body.token;
   const userId = req.session.user!.userId;
 
+  console.log('token', token)
+  console.log('userId', userId)
+
   if (!token)
     return res
-      .status(400)
+      .status(200)
       .json({ message: "Token not passed!", success: false });
 
   // check if token is valid
   const val = await redisClient.get(token);
   if (!val)
     return res
-      .status(400)
+      .status(200)
       .json({ message: "Link is expired!", success: false });
 
   let linkData = JSON.parse(val);
+  console.log('linkData', linkData)
 
   const guild = await Guild.findOne({
-    where: { id: linkData.guildId },
+    where: { id: linkData },
     include: [
       {
         model: User,
@@ -71,18 +75,18 @@ router.post("/:guildId/join", async (req: Request, res: Response) => {
     ],
   });
   if (!guild)
-    return res.status(400).json({ message: "Guild not found", success: false });
+    return res.status(200).json({ message: "Guild not found", success: false });
 
   // check if user already exists in guild
   if (guild.users!.map((u) => u.id).includes(userId))
     return res
-      .status(400)
+      .status(200)
       .json({ message: "You are already in the guild!", success: false });
 
   // add user to guild
   const guildMember = await GuildMember.create({
     userId,
-    guildId: parseInt(guildId),
+    guildId: parseInt(linkData),
   });
 
   return res.status(200).json({
@@ -106,7 +110,8 @@ router.post("/:guildId/invite", async (req: Request, res: Response) => {
 
   // create hash & save in redis
   const hash = crypto.randomBytes(20).toString("hex");
-  await redisClient.set(hash, userId.toString(), "EX", 60 * 60 * 24);
+  // await redisClient.set(hash, userId.toString(), "EX", 60 * 60 * 24);
+  await redisClient.set(hash, guildId, "EX", 60 * 60 * 24);
   // return token with 200 OK
   return res.status(200).json({
     message: `${process.env.FRONTEND_HOST}/app?invite=${hash}`,

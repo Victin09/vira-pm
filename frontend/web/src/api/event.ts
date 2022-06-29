@@ -6,6 +6,8 @@ export const getEvents = async (guildId?: number) => {
     if (!guildId) return;
     const response = await axios.get(`${BASE_URL}/api/v1/guilds/${guildId}/events`, { withCredentials: true });
     response.data.data.forEach((element: any) => {
+        console.log('start', element.start)
+        console.log('end', element.end)
         element.start = new Date(element.start)
         element.end = new Date(element.end)
     })

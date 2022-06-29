@@ -1,13 +1,11 @@
 import Button from '../../ui/Button';
 import { Box, Divider, HStack, Text, VStack } from "@chakra-ui/layout";
 import CornerLogo from "../shared/CornerLogo";
-import { History } from "history";
+import { useNavigate } from 'react-router-dom';
 
-interface Props {
-    history: History;
-}
+const LandingPage: React.FC = () => {
+    const navigate = useNavigate();
 
-const LandingPage: React.FC<Props> = ({ history }) => {
     return (
         <>
             <Box
@@ -43,15 +41,15 @@ const LandingPage: React.FC<Props> = ({ history }) => {
                 >
                     <Text color="var(--background-primary)" fontSize="2xl">
                         about us.
-					</Text>
-                    <Divider orientation="vertical"/>
+                    </Text>
+                    <Divider orientation="vertical" />
                     <Text color="var(--background-primary)" fontSize="2xl">
                         log in.
-					</Text>
+                    </Text>
                     <Divider orientation="vertical" />
                     <Text color="var(--background-primary)" fontSize="2xl">
                         sign up.
-					</Text>
+                    </Text>
                 </HStack>
 
                 <Box
@@ -69,21 +67,21 @@ const LandingPage: React.FC<Props> = ({ history }) => {
                     <VStack spacing={1} alignItems="flex-start">
                         <Text fontSize="4xl" color="white">
                             manage your teams,
-						</Text>
+                        </Text>
                         <Text fontSize="4xl" fontWeight="bold" color="white">
                             with ease.
-						</Text>
+                        </Text>
                         <Text fontSize="md" fontWeight="bold" color="white">
                             a project management tool with the user in mind.
-						</Text>
+                        </Text>
                         <Button
                             size="md"
                             bg="var(--background-secondary)"
                             color="white"
-                            onClick={() => history.push("/app")}
+                            onClick={() => navigate("/app")}
                         >
                             get started now.
-						</Button>
+                        </Button>
                     </VStack>
                 </Box>
 

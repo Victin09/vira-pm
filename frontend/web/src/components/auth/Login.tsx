@@ -2,7 +2,6 @@ import { Form, Formik } from "formik";
 import * as yup from "yup";
 import React from "react";
 import ConfirmCode from "./ConfirmCode";
-import { Redirect } from "react-router-dom";
 import AuthFormWrapper from "./AuthFormWrapper";
 import { VStack, Text, HStack } from "@chakra-ui/react";
 import Button from '../../ui/Button';
@@ -10,26 +9,21 @@ import { useMe } from "../../hooks/useMe";
 import Loader from "../shared/Loader";
 import { useMutation } from "react-query";
 import { login } from "../../api/auth";
-import { History } from "history";
 import FormInput from "./FormInput";
 import { useAlerts } from "../../store/useAlerts";
 import LoginTransition from "../animations/LoginTransition";
-
-type LoginProps = {
-    history: History;
-};
+import { useNavigate } from "react-router-dom";
 
 const schema = yup.object().shape({
     email: yup.string().required(),
     password: yup.string().required(),
 });
 
-const Login: React.FC<LoginProps> = ({ history }) => {
+const Login: React.FC = () => {
     const [confirmCode, setConfirmCode] = React.useState(false);
     const [animationState, startAnimation] = React.useState(false);
     const { data, isLoading } = useMe();
-
-
+    const navigate = useNavigate();
     const { add } = useAlerts();
     const mutation = useMutation(login, {
         onSuccess: (data) => {
@@ -40,14 +34,13 @@ const Login: React.FC<LoginProps> = ({ history }) => {
             }
         },
     });
-    
+
     if (isLoading) return <Loader />;
-    
-    console.log('data', data)
+
     if (data.success) {
-        return <Redirect to="/app" />;
+        navigate("/app")
     }
-    
+
     return (
         <>
             <Formik
@@ -102,7 +95,7 @@ const Login: React.FC<LoginProps> = ({ history }) => {
                                             color="var(--text-primary)"
                                         >
                                             Submit
-										</Button>
+                                        </Button>
                                     </VStack>
                                 </Form>
 
@@ -111,18 +104,18 @@ const Login: React.FC<LoginProps> = ({ history }) => {
                                         bg="var(--background-secondary)"
                                         color="var(--text-primary)"
                                         size="xs"
-                                        onClick={() => history.push("/")}
+                                        onClick={() => navigate("/")}
                                     >
                                         back to home
-									</Button>
+                                    </Button>
                                     <Button
                                         bg="var(--background-secondary)"
                                         color="var(--text-primary)"
                                         size="xs"
-                                        onClick={() => history.push("/auth/register")}
+                                        onClick={() => navigate("/auth/register")}
                                     >
                                         new account?
-									</Button>
+                                    </Button>
                                 </HStack>
                             </>
                         )}
@@ -131,7 +124,7 @@ const Login: React.FC<LoginProps> = ({ history }) => {
                                 <ConfirmCode />
                                 <Button colorScheme="teal" size="xs" marginTop="10px">
                                     Go Back
-								</Button>
+                                </Button>
                             </>
                         )}
                     </AuthFormWrapper>

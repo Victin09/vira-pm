@@ -1,20 +1,11 @@
-import { UserAttributes } from "@tidify/common";
-import { useQuery } from "react-query";
-import { getMembers } from "../../api/guild";
-import { useSelectedGuild } from "../../store/useSelectedGuild";
+import { GuildAttributes, UserAttributes } from "@tidify/common";
 
-interface Props { }
+type MembersTableProps = {
+  users: UserAttributes[]
+  selectedGuild: GuildAttributes
+}
 
-const MembersTable: React.FC<Props> = () => {
-  const selectedGuild = useSelectedGuild((state) => state.selectedGuild);
-  const { data, isLoading } = useQuery(
-    ["members", selectedGuild?.id],
-    () => getMembers(selectedGuild?.id),
-    { enabled: !!selectedGuild }
-  );
-
-  if (isLoading) return null;
-
+const MembersTable: React.FC<MembersTableProps> = ({ users, selectedGuild }) => {
   return (
     <div className="overflow-x-auto w-full">
       <table className="table w-full">
@@ -26,10 +17,9 @@ const MembersTable: React.FC<Props> = () => {
           </tr>
         </thead>
         <tbody>
-          {data &&
-            data.success &&
-            data.data.map((u: UserAttributes, index: number) => (
-              <tr className="hover">
+          {users &&
+            users.map((u: UserAttributes, index: number) => (
+              <tr className="hover" key={index}>
                 <td>{index}</td>
                 <td>
                   <div>

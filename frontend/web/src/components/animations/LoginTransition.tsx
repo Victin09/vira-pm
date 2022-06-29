@@ -2,28 +2,24 @@ import React from "react";
 import { Flex } from "@chakra-ui/layout";
 import { CSSTransition } from "react-transition-group";
 import "./login-transition.scss";
-import { RouteComponentProps, withRouter } from "react-router-dom";
-import { History } from "history";
 import { Box } from "@chakra-ui/react";
 import { useQueryClient } from "react-query";
+import { useNavigate } from "react-router-dom";
 
 
-interface Props extends RouteComponentProps {
+interface Props {
     animationState: boolean;
     startAnimation: React.Dispatch<React.SetStateAction<boolean>>;
     redirectUrl: string;
-    history: History;
 }
 
 const LoginTransition: React.FC<Props> = ({
     animationState,
     startAnimation,
     redirectUrl,
-    history,
 }) => {
-
-
     const queryClient = useQueryClient();
+    const navigate = useNavigate();
     return (
         <Box
             position="absolute"
@@ -45,7 +41,7 @@ const LoginTransition: React.FC<Props> = ({
                     }, 2000);
                 }}
                 onExited={() => {
-                    history.push(redirectUrl);
+                    navigate(redirectUrl);
                 }}
             >
                 <div className="animation-box">
@@ -88,5 +84,5 @@ const LoginTransition: React.FC<Props> = ({
     );
 };
 
-export default withRouter<Props, any>(LoginTransition);
+export default LoginTransition;
 

@@ -1,21 +1,22 @@
 import React from 'react';
 import { Formik, Form } from 'formik';
 import { History } from 'history';
-import { Redirect, withRouter } from 'react-router-dom';
 import { Button } from '@chakra-ui/button';
 import { VStack, } from '@chakra-ui/react';
 import { useMutation } from 'react-query';
 import { confirmCode } from '../../api/auth';
 import FormInput from './FormInput';
 import { useAlerts } from '../../store/useAlerts';
+import { useNavigate } from 'react-router-dom';
 
 type ConfirmCodeProps = {
     history: History;
 }
 
-const ConfirmCode: React.FC<ConfirmCodeProps> = () => {
+const ConfirmCode: React.FC = () => {
     const [redirect, setRedirect] = React.useState(false);
     const { add } = useAlerts();
+    const navigate = useNavigate();
     const mutation = useMutation(confirmCode, {
         onSuccess: (data) => {
             if (data.success) {
@@ -25,7 +26,7 @@ const ConfirmCode: React.FC<ConfirmCodeProps> = () => {
         }
     });
 
-    if (redirect) return <Redirect to="/auth/login" />
+    if (redirect) navigate("/auth/login")
 
     return (
         <Formik
@@ -53,7 +54,7 @@ const ConfirmCode: React.FC<ConfirmCodeProps> = () => {
                             type="submit"
                         >
                             Submit
-                                </Button>
+                        </Button>
                     </VStack>
                 </Form>
             )}
@@ -61,4 +62,4 @@ const ConfirmCode: React.FC<ConfirmCodeProps> = () => {
     );
 }
 
-export default withRouter(ConfirmCode);
+export default ConfirmCode;

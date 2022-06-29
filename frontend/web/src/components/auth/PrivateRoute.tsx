@@ -1,5 +1,5 @@
 import React from "react";
-import { Redirect, RouteProps, Route } from "react-router-dom";
+import { RouteProps, Route, Navigate, Outlet } from "react-router-dom";
 import Loader from "../shared/Loader";
 import { useMe } from "../../hooks/useMe";
 
@@ -8,19 +8,19 @@ interface Props extends RouteProps {
 }
 
 const PrivateRoute: React.FC<Props> = ({ excludedRoles, ...rest }) => {
-  const { data, isLoading, isFetching } = useMe();
-  // request to `/api/v1/users/me`
+  const { data, isLoading } = useMe();
   if (isLoading) {
     return <Loader />;
   }
   if (!data.success) {
-    return <Redirect to="/auth/login" />;
+    return <Navigate to="/auth/login" />
   }
 
   return (
-    <>
-      <Route {...rest} />
-    </>
+    <Outlet />
+    // <>
+    //   <Route {...rest} />
+    // </>
   );
 };
 

@@ -2,7 +2,6 @@ import React from "react";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
 import ConfirmCode from "./ConfirmCode";
-import { Redirect } from "react-router-dom";
 import { VStack, Text, HStack } from "@chakra-ui/react";
 import Button from "../../ui/Button";
 import AuthFormWrapper from "./AuthFormWrapper";
@@ -13,10 +12,7 @@ import Loader from "../shared/Loader";
 import FormInput from "./FormInput";
 import { useAlerts } from "../../store/useAlerts";
 import { History } from "history";
-
-type RegisterProps = {
-    history: History;
-};
+import { useNavigate } from "react-router-dom";
 
 const schema = yup.object().shape({
     firstName: yup.string().required(),
@@ -26,10 +22,11 @@ const schema = yup.object().shape({
     password: yup.string().required(),
 });
 
-const Register: React.FC<RegisterProps> = ({ history }) => {
+const Register: React.FC = () => {
     const [confirmCode, setConfirmCode] = React.useState(false);
     const { data, isLoading } = useMe();
     const { add } = useAlerts();
+    const navigate = useNavigate();
     const mutation = useMutation(register, {
         onSuccess: (data) => {
             add(data.message, data.success ? "success" : "error");
@@ -40,7 +37,7 @@ const Register: React.FC<RegisterProps> = ({ history }) => {
     if (isLoading) return <Loader />;
 
     if (data.success) {
-        return <Redirect to="/app" />;
+        navigate('/app')
     }
     return (
         <>
@@ -122,7 +119,7 @@ const Register: React.FC<RegisterProps> = ({ history }) => {
                                             type="submit"
                                         >
                                             Submit
-										</Button>
+                                        </Button>
                                     </VStack>
                                 </Form>
 
@@ -131,18 +128,18 @@ const Register: React.FC<RegisterProps> = ({ history }) => {
                                         bg="var(--background-secondary)"
                                         color="var(--text-primary)"
                                         size="xs"
-                                        onClick={() => history.push("/")}
+                                        onClick={() => navigate("/")}
                                     >
                                         back to home
-									</Button>
+                                    </Button>
                                     <Button
                                         bg="var(--background-secondary)"
                                         color="var(--text-primary)"
                                         size="xs"
-                                        onClick={() => history.push("/auth/login")}
+                                        onClick={() => navigate("/auth/login")}
                                     >
                                         go to login
-									</Button>
+                                    </Button>
                                 </HStack>
                             </>
                         )}
@@ -156,7 +153,7 @@ const Register: React.FC<RegisterProps> = ({ history }) => {
                                     marginTop="10px"
                                 >
                                     Go Back
-								</Button>
+                                </Button>
                             </>
                         )}
                     </AuthFormWrapper>

@@ -13,13 +13,12 @@ import { ChannelAttributes } from "@tidify/common";
 import { useSocket } from "../../store/useSocket";
 import { logout } from "../../api/auth";
 import { History } from 'history';
-import { RouteComponentProps, withRouter } from "react-router";
 
-interface Props extends RouteComponentProps {
-    history: History;
-};
+// interface Props extends RouteComponentProps {
+//     history: History;
+// };
 
-const ChannelSidebar: React.FC<Props> = React.memo(({ history }) => {
+const ChannelSidebar: React.FC = React.memo(() => {
     const { select, selectedChannel } = useSelectedChannel();
     const selectedGuild = useSelectedGuild(state => state.selectedGuild);
 
@@ -35,7 +34,7 @@ const ChannelSidebar: React.FC<Props> = React.memo(({ history }) => {
     const handleLogout = () => {
         mutation.mutate();
         queryClient.invalidateQueries('me');
-        history.push('/')
+        // history.push('/')
     }
 
     return (
@@ -228,4 +227,4 @@ const SectionDivider: React.FC<SectionDividerProps> = ({ icon: Icon, title, marg
     );
 }
 
-export default withRouter<Props, any>(ChannelSidebar);
+export default ChannelSidebar;

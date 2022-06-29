@@ -1,6 +1,5 @@
 import React from 'react';
 import { Formik, Form } from 'formik';
-import { RouteComponentProps } from 'react-router-dom';
 import { VStack, Button, Text } from '@chakra-ui/react';
 import AuthFormWrapper from './AuthFormWrapper';
 import { useMutation } from 'react-query';
@@ -11,9 +10,7 @@ interface MatchParams {
     token: string;
 }
 
-interface Props extends RouteComponentProps<MatchParams> { }
-
-const ResetPassword: React.FC<Props> = ({ match }) => {
+const ResetPassword: React.FC = () => {
 
     const mutation = useMutation(resetPassword, {});
     return (
@@ -33,7 +30,7 @@ const ResetPassword: React.FC<Props> = ({ match }) => {
                     <AuthFormWrapper>
                         <Text fontSize="3xl" color="white">
                             Change Password
-                    </Text>
+                        </Text>
                         <Form style={{ padding: '20px', borderRadius: '10px', background: '#3f9996' }}>
                             <VStack spacing="10px">
                                 <FormInput

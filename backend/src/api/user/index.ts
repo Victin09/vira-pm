@@ -11,18 +11,36 @@ import * as yup from "yup";
 import User from "../../db/models/User";
 import Guild from "../../db/models/Guild";
 import GuildMember from "../../db/models/GuildMember";
+import { Op } from "sequelize";
 
 /**
  * Get all users.
  * @route {GET} /api/v1/users/
  */
-router.get("/", async (_: Request, res: Response) => {
-  const users = await User.findAll();
+router.get("/", async (req: Request, res: Response) => {
+  const userId = req.session.user!.userId;
+  console.log('userId', userId)
+
+  const users = await User.findAll({
+    where: {
+      id: {
+        [Op.ne]: userId
+      },
+    },
+  });
+
   return res.status(200).json({
     data: users,
     message: "Successfully found all users!",
     success: true,
   });
+
+  // const users = await User.findAll();
+  // return res.status(200).json({
+  //   data: users,
+  //   message: "Successfully found all users!",
+  //   success: true,
+  // });
 });
 
 /**
@@ -137,26 +155,26 @@ router.post("/guilds", async (req: Request, res: Response) => {
  * Get all todos
  * @route {GET} /api/v1/users/todos
  */
-router.get("/todos", async (req: Request, res: Response) => {});
+router.get("/todos", async (req: Request, res: Response) => { });
 
 /**
  * Create a new todo
  * @route {POST} /api/v1/users/todos
  * @bodyparam guild object that is defined in the schemas section
  */
-router.get("/todos", async (req: Request, res: Response) => {});
+router.get("/todos", async (req: Request, res: Response) => { });
 
 /**
  * Update a todo
  * @route {PUT} /api/v1/users/todos/:todoId
  */
-router.get("/todos", async (req: Request, res: Response) => {});
+router.get("/todos", async (req: Request, res: Response) => { });
 
 /**
  * Delete a todo
  * @route {DELETE} /api/v1/users/todos/:todoId
  */
-router.get("/todos", async (req: Request, res: Response) => {});
+router.get("/todos", async (req: Request, res: Response) => { });
 
 /**
  * Get one user.

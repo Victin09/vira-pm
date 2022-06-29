@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
@@ -13,23 +13,23 @@ import PrivateRoute from "./components/auth/PrivateRoute";
 const App: React.FC = () => {
   return (
     <Router>
-      <Switch>
-        <Route path="/" exact component={LandingPage} />
-        <Route path="/calendar" exact component={Calendar} />
-        <Route path="/auth/login" exact component={Login} />
-        <Route path="/auth/register" exact component={Register} />
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/calendar" element={<Calendar />} />
+        <Route path="/auth/login" element={<Login />} />
+        <Route path="/auth/register" element={<Register />} />
         <Route
           path="/auth/req/password"
-          exact
-          component={RequestPasswordReset}
+          element={RequestPasswordReset}
         />
         <Route
           path="/auth/reset/password/:token"
-          exact
-          component={ResetPassword}
+          element={ResetPassword}
         />
-        <PrivateRoute path="/app" exact component={Home} />
-      </Switch>
+        <Route path="/app" element={<PrivateRoute />}>
+          <Route path="/app" element={<Home />} />
+        </Route>
+      </Routes>
     </Router>
   );
 };

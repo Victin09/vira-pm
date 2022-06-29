@@ -7,8 +7,9 @@ import { useSelectedGuild } from "../../store/useSelectedGuild";
 import { useSelectedChannel } from "../../store/useSelectedChannel";
 import { useMe } from "../../hooks/useMe";
 import { logout } from "../../api/auth";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 import { AiFillAppstore, AiOutlinePlus } from 'react-icons/ai'
+import { useNavigate } from "react-router-dom";
 
 const Navigation: React.FC = () => {
   const { data, isLoading } = useQuery("guilds", getGuilds);
@@ -18,7 +19,7 @@ const Navigation: React.FC = () => {
   const { data: userData } = useMe()
   const mutation = useMutation(logout);
   const queryClient = useQueryClient();
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const handleAddGuild = (displayModal: boolean) => {
     setDisplayCreateGuildModal(displayModal)
@@ -27,13 +28,13 @@ const Navigation: React.FC = () => {
   const handleLogout = () => {
     mutation.mutate();
     queryClient.invalidateQueries('me');
-    history.push('/')
+    navigate('/')
   }
 
   return (
     <>
-      <div className="flex flex-col items-center content-center w-20 h-full bg-base-200">
-        <span className="p-2 font-bold text-2xl ">VM</span>
+      <div className="flex flex-col items-center content-center w-20 h-full bg-base-200 border-r-2 border-base-300 shadow">
+        <span className="p-2 font-bold text-2xl">VM</span>
 
         {!isLoading && data.data.map((guild: GuildAttributes) => (
           <Guild key={guild.id} guild={guild} isSelected={selectedGuild?.id === guild.id} />
