@@ -1,15 +1,18 @@
 import axios from 'axios'
 import { EventAttributes } from "@tidify/common";
 import { BASE_URL } from "../constants";
+import moment from 'moment';
 
 export const getEvents = async (guildId?: number) => {
     if (!guildId) return;
     const response = await axios.get(`${BASE_URL}/api/v1/guilds/${guildId}/events`, { withCredentials: true });
     response.data.data.forEach((element: any) => {
-        console.log('start', element.start)
-        console.log('end', element.end)
+        // element.start = moment(element.start, 'YYYY-MM-DD HH:mm').toDate()
+        // element.end = moment(element.end, 'YYYY-MM-DD HH:mm').toDate()
         element.start = new Date(element.start)
         element.end = new Date(element.end)
+        console.log('start', element.start)
+        console.log('end', element.end)
     })
     return response.data;
     // const response = await fetch(`${BASE_URL}/api/v1/guilds/${guildId}/events`);

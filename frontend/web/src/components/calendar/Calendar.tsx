@@ -5,7 +5,6 @@ import BoxWrapper from "../shared/BoxWrapper";
 import { useQuery } from "react-query";
 import { getEvents } from "../../api/event";
 import { useSelectedGuild } from "../../store/useSelectedGuild";
-import { useDisclosure } from "@chakra-ui/hooks";
 import CreateEventModal from "./CreateEventModal";
 import 'moment/locale/es';
 import './calendar.scss'
@@ -170,8 +169,11 @@ const MyCalendar: React.FC = () => {
           }}
           startAccessor="start"
           endAccessor="end"
-          style={{ height: "100%", width: "100%", color: "#1D1C1B" }}
+          style={{ height: "100%", width: "100%" }}
           eventPropGetter={eventPropGetter}
+          // formats={{
+          //   timeGutterFormat: 'HH:mm'
+          // }}
           components={{
             header: HeaderCellContent,
             toolbar: ToolbarContent,
