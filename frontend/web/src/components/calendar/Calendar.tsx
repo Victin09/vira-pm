@@ -128,16 +128,16 @@ const MyCalendar: React.FC = () => {
     (event, start, end, isSelected) => (
       {
         ...({
-          className: 'bg-primary font-semibold rounded'
+          className: 'bg-primary font-semibold rounded outline-none border-none'
         }),
         ...(moment(start).isAfter(moment().subtract(1, 'hours')) && {
-          className: 'bg-warning font-semibold rounded',
+          className: 'bg-warning font-semibold rounded outline-none border-none',
         }),
         ...(moment(end).isBefore(moment()) && {
-          className: 'bg-success font-semibold rounded',
+          className: 'bg-success font-semibold rounded outline-none border-none',
         }),
         ...(isSelected && {
-          className: 'bg-info font-semibold outline-0 rounded',
+          className: 'bg-info font-semibold rounded outline-none border-none',
         }),
       }),
     []
