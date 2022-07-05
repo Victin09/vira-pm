@@ -1,20 +1,15 @@
 import React, { forwardRef, useRef, useState } from "react";
-// import DatePicker, { registerLocale } from "react-datepicker";
 import { useQueryClient, useMutation } from "react-query";
-import es from "date-fns/locale/es"; // the locale you want
 import { EventAttributes } from "@tidify/common";
 import { createEvent } from "../../api/event";
 import { Response } from "../../types";
 import { useSelectedGuild } from "../../store/useSelectedGuild";
 
-import 'react-datepicker/dist/react-datepicker.css'
 import { SubmitHandler, useForm } from "react-hook-form";
 import useOnClickOutside from "../../hooks/useClickOutside";
-import { format } from "date-fns";
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import DatePicker, { DayValue, DayRange, Day } from 'react-modern-calendar-datepicker'
-
-// registerLocale("es", es); // register it with the name you want
+import { addHoursAndMinutesToDate, generateDateHours } from "../../utils/dates";
 
 interface Props {
   currentDate: Date;
@@ -123,9 +118,10 @@ const CreateEventModal: React.FC<Props> = ({
   handleClick
 }) => {
   const ref = useRef<HTMLDivElement>(null)
-  const [day, setDay] = React.useState<DayValue>(null);
-  const [startDate, setStartDate] = useState<Date | null>(currentDate)
-  const [endDate, setEndDate] = useState<Date | null>()
+  const [day, setDay] = useState<DayValue>({ day: currentDate.getDate(), month: currentDate.getMonth() + 1, year: currentDate.getFullYear() });
+  const [startHours, setStartHours] = useState<string>('')
+  const [endHours, setEndHours] = useState<string>('')
+  const [loading, setLoading] = useState<boolean>(false)
   const queryClient = useQueryClient();
   const selectedGuild = useSelectedGuild(state => state.selectedGuild);
   const { register, handleSubmit, formState: { errors } } = useForm<{ title: string, startDate: Date, endDate: Date }>()
@@ -166,15 +162,19 @@ const CreateEventModal: React.FC<Props> = ({
       }
     },
     onSettled: () => queryClient.invalidateQueries("events"),
+    onSuccess: handleClick
   });
 
-  const onSubmit: SubmitHandler<{ title: string, startDate: Date, endDate: Date }> = (data) => {
+  const onSubmit: SubmitHandler<{ title: string }> = (data) => {
+    const startDate = addHoursAndMinutesToDate(startHours, new Date(day!.year, day!.month - 1, day!.day))
+    const endDate = addHoursAndMinutesToDate(endHours, new Date(day!.year, day!.month - 1, day!.day))
     mutation.mutate({
       guildId: selectedGuild!.id,
       title: data.title,
-      start: startDate!,
-      end: endDate!
+      start: startDate,
+      end: endDate
     })
+    setLoading(true)
   }
 
   return (
@@ -196,50 +196,48 @@ const CreateEventModal: React.FC<Props> = ({
                 </label>
               )}
             </div>
-            <div className="form-control w-full max-w-xs">
-              <label className="label">
-                <span className="label-text">Qué día es el evento?</span>
-              </label>
-              <DatePicker
-                locale={myCustomLocale}
-                shouldHighlightWeekends
-                calendarClassName="bg-base-200"
-                calendarSelectedDayClassName="rounded bg-primary"
-                value={day}
-                onChange={setDay}
-                inputClassName="input input-bordered w-full text-left" />
+            <div className="flex align-middle">
+              <div className="form-control w-full max-w-xs">
+                <label className="label">
+                  <span className="label-text">Qué día es el evento?</span>
+                </label>
+                <DatePicker
+                  locale={myCustomLocale}
+                  shouldHighlightWeekends
+                  calendarClassName="bg-base-200"
+                  calendarSelectedDayClassName="rounded bg-primary"
+                  value={day}
+                  onChange={setDay}
+                  inputClassName="input text-left" />
+              </div>
+              <div className="form-control w-full max-w-xs">
+                <label className="label">
+                  <span className="label-text">Hora de inicio</span>
+                </label>
+                <select className="select" onChange={(e) => setStartHours(e.target.value)}>
+                  {generateDateHours().map((hour, index) => (
+                    <option value={hour} key={index}>{hour}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-control w-full max-w-xs">
+                <label className="label">
+                  <span className="label-text">Hora final</span>
+                </label>
+                <select className="select" onChange={(e) => setEndHours(e.target.value)}>
+                  {generateDateHours().map((hour, index) => (
+                    <option value={hour} key={index}>{hour}</option>
+                  ))}
+                </select>
+              </div>
             </div>
-            <button type="submit" className="btn btn-primary w-full mt-2">Crear</button>
+            <button type="submit" className={`btn btn-primary w-full mt-2${loading ? ' loading' : ''}`}>{loading ? 'Cargando' : 'Crear'}</button>
           </form>
         </div>
       </div>
     </>
   );
 };
-
-/*
-* TODO: Generate hours with minutes interval 15
-*/
-// let items = [];
-// for (var hour = 0; hour < 24; hour++) {
-//   items.push([hour, 0]);
-//   items.push([hour, 30]);
-// }
-
-// const date = new Date();
-// const formatter = new Intl.DateTimeFormat('en-US', {
-//   hour: 'numeric',
-//   minute: 'numeric',
-//   hour12: false
-// });
-
-// const range = items.map(time => {
-//   const [hour, minute] = time;
-//   date.setHours(hour);
-//   date.setMinutes(minute);
-
-//   return formatter.format(date);
-// });
 
 export default CreateEventModal;
 

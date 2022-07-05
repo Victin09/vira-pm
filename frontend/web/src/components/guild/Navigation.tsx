@@ -39,18 +39,19 @@ const Navigation: React.FC = () => {
         {!isLoading && data.data.map((guild: GuildAttributes) => (
           <Guild key={guild.id} guild={guild} isSelected={selectedGuild?.id === guild.id} />
         ))}
-        {/* <GuildAddButton onClick={() => setDisplayCreateGuildModal(true)} /> */}
         <GuildAddButton onClick={() => setDisplayCreateGuildModal(true)} />
 
         <div className="flex flex-col absolute bottom-0 mb-1">
-          <div className="dropdown dropdown-right dropdown-end">
-            <label tabIndex={0} className="btn btn-primary m-1"><AiFillAppstore /></label>
-            <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
-              <li><a onClick={() => select('members')}>Usuarios</a></li>
-              <li><a onClick={() => select('calendar')}>Calendario</a></li>
-              <li><a onClick={() => select('kanban')}>Kanban</a></li>
-            </ul>
-          </div>
+          {selectedGuild && (
+            <div className="dropdown dropdown-right dropdown-end">
+              <label tabIndex={0} className="btn btn-primary m-1"><AiFillAppstore /></label>
+              <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+                <li><a onClick={() => select('members')}>Usuarios</a></li>
+                <li><a onClick={() => select('calendar')}>Calendario</a></li>
+                <li><a onClick={() => select('kanban')}>Kanban</a></li>
+              </ul>
+            </div>
+          )}
           <span className="font-semibold">{userData.data.username}</span>
           {/* <SidenavUserText>{!isLoading && userData.data.username}</SidenavUserText>
           <SidenavUserIcons>

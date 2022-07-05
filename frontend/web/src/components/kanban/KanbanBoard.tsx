@@ -1,18 +1,4 @@
-import React from "react";
-import { Avatar } from "@chakra-ui/avatar";
-import Button from "../../ui/Button";
-import {
-	Box,
-	Center,
-	Divider,
-	Flex,
-	HStack,
-	Text,
-	VStack,
-} from "@chakra-ui/layout";
-import { Tag } from "@chakra-ui/tag";
-import { Plus } from "react-feather";
-import BoxWrapper from "../shared/BoxWrapper";
+import React, { useState } from "react";
 import {
 	DragDropContext,
 	Draggable,
@@ -28,28 +14,201 @@ import {
 	ColumnAttributes,
 	TaskAttributes,
 } from "@tidify/common";
+import { createColumn } from '../../api/board';
 import { move, reorder } from "../../utils/dnd";
-import { useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getColumns } from "../../api/board";
 import { Response } from "../../types";
-import CreateColumnModal from "./CreateColumnModal";
-import CreateTaskModal from "./CreateTaskModal";
+import { SubmitHandler, useForm } from "react-hook-form";
 
-interface Props {
+interface BoardProps {
 	board: BoardAttributes;
 }
 
-const KanbanBoard: React.FC<Props> = ({ board }) => {
+const KanbanBoard: React.FC<BoardProps> = ({ board }) => {
 	const { data, isLoading } = useQuery<Response<ColumnAttributes[]>>(
 		"columns",
 		() => getColumns(board.id)
 	);
 
-	const [selectedBoard, setBoard] =
-		React.useState<BoardAttributes | null>(null);
+	const [selectedBoard, setBoard] = useState<BoardAttributes | null>(null);
+	const [newList, setNewList] = useState<boolean>(false)
+	const { register, handleSubmit, formState: { errors } } = useForm<{ title: string }>()
 
 	const queryClient = useQueryClient();
+	const mutation = useMutation(createColumn, {
+		onMutate: async (params: Omit<ColumnAttributes, "id" | "amount" | "order">) => {
+			await queryClient.cancelQueries("columns");
+
+			const snapshot = queryClient.getQueryData<Response<ColumnAttributes[]>>("columns");
+
+			snapshot && queryClient.setQueryData<Response<ColumnAttributes[]>>("columns", prev => ({
+				data: [
+					...snapshot.data,
+					{
+						name: params.name,
+						id: Math.random(),
+						boardId: params.boardId,
+						amount: 0,
+						order: 0,
+					},
+				],
+				message: prev!.message,
+				success: prev!.success
+			}));
+
+			return { snapshot };
+		},
+		onError: (_, __, context) => {
+			if (context?.snapshot) {
+				queryClient.setQueryData<Response<ColumnAttributes[]>>('columns', context.snapshot);
+			}
+		},
+		onSettled: () => queryClient.invalidateQueries("columns"),
+		onSuccess: () => setNewList(false)
+	})
+
 	if (isLoading) return null;
+
+	/*
+	* TODO: Change rest calls with react queries
+	*/
+	// const onDragEnd = async (result: any) => {
+	//   const { destination, source } = result;
+
+	//   if (!destination) return;
+
+	//   if (result.type === "task") {
+	//     const sourceList = lists.find((list) => list._id === source.droppableId);
+	//     const destinationList = lists.find(
+	//       (list) => list._id === destination.droppableId
+	//     );
+
+	//     if (sourceList && destinationList) {
+	//       if (sourceList._id === destinationList._id) {
+	//         const newCards = reorder(
+	//           sourceList.cards!,
+	//           source.index,
+	//           destination.index
+	//         );
+
+	//         await Promise.all(
+	//           newCards.map(async (card) => {
+	//             try {
+	//               const apiResponse = await fetch(
+	//                 `${getApiUrl()}/kanban/cards/${card._id}`,
+	//                 {
+	//                   method: "PUT",
+	//                   headers: {
+	//                     "Content-Type": "application/json",
+	//                   },
+	//                   body: JSON.stringify(card),
+	//                 }
+	//               );
+	//               const result: ApiResponse<any> = await apiResponse.json();
+	//               if (result.status !== 200) return;
+	//             } catch (error) {
+	//               console.log("error", error);
+	//             }
+	//           })
+	//         );
+	//         const newState = lists.map((list) => {
+	//           list._id === sourceList._id && (list.cards = newCards);
+	//           return list;
+	//         });
+	//         setLists(newState);
+	//       } else {
+	//         // Remove from list and reorder cards
+	//         const { removed, result } = removeAndReorder(
+	//           sourceList.cards!,
+	//           source.index,
+	//           destination.index
+	//         );
+	//         // Update new source list cards order
+	//         await Promise.all(
+	//           result.map(async (card) => {
+	//             try {
+	//               const apiResponse = await fetch(
+	//                 `${getApiUrl()}/kanban/cards/${card._id}`,
+	//                 {
+	//                   method: "PUT",
+	//                   headers: {
+	//                     "Content-Type": "application/json",
+	//                   },
+	//                   body: JSON.stringify(card),
+	//                 }
+	//               );
+	//               const result: ApiResponse<any> = await apiResponse.json();
+	//               if (result.status !== 200) return;
+	//             } catch (error) {
+	//               console.log("error", error);
+	//             }
+	//           })
+	//         );
+
+	//         // Update card new list
+	//         removed.list = destinationList._id;
+	//         // Insert into new list
+	//         const newCards = insertAndReorder(
+	//           destinationList!.cards,
+	//           removed,
+	//           destination.index
+	//         );
+	//         // Update new cards order
+	//         await Promise.all(
+	//           newCards.map(async (card) => {
+	//             try {
+	//               const apiResponse = await fetch(
+	//                 `${getApiUrl()}/kanban/cards/${card._id}`,
+	//                 {
+	//                   method: "PUT",
+	//                   headers: {
+	//                     "Content-Type": "application/json",
+	//                   },
+	//                   body: JSON.stringify(card),
+	//                 }
+	//               );
+	//               const result: ApiResponse<any> = await apiResponse.json();
+	//               if (result.status !== 200) return;
+	//             } catch (error) {
+	//               console.log("error", error);
+	//             }
+	//           })
+	//         );
+	//         const newState = lists.map((list) => {
+	//           list._id === sourceList._id && (list.cards = result);
+	//           list._id === destinationList._id && (list.cards = newCards);
+	//           return list;
+	//         });
+	//         setLists(newState);
+	//       }
+	//     }
+	//   } else {
+	//     const listsTmp = [...lists];
+	//     const reorderedList = reorder(listsTmp, source.index, destination.index);
+	//     await Promise.all(
+	//       reorderedList.map(async (list) => {
+	//         try {
+	//           const apiResponse = await fetch(
+	//             `${getApiUrl()}/kanban/lists/${list._id}`,
+	//             {
+	//               method: "PUT",
+	//               headers: {
+	//                 "Content-Type": "application/json",
+	//               },
+	//               body: JSON.stringify(list),
+	//             }
+	//           );
+	//           const result: ApiResponse<any> = await apiResponse.json();
+	//           if (result.status !== 200) return;
+	//         } catch (error) {
+	//           console.log("error", error);
+	//         }
+	//       })
+	//     );
+	//     setLists(reorderedList);
+	//   }
+	// };
 
 	const onDragEnd = (result: DropResult) => {
 		const { source, destination } = result;
@@ -123,175 +282,183 @@ const KanbanBoard: React.FC<Props> = ({ board }) => {
 						})*/
 		}
 	};
+
+	const onSubmit: SubmitHandler<{ title: string }> = ({ title }) => {
+		mutation.mutate({
+			boardId: board.id,
+			name: title,
+		})
+	}
+
 	return (
-		<>
+		<div className="flex m-1">
 			<DragDropContext onDragEnd={onDragEnd}>
-				<BoxWrapper>
-					<VStack h="100%" spacing={5}>
-						<Flex w="100%" alignItems="center" justifyContent="start">
-							<Text
-								fontSize="2xl"
-								fontWeight="bold"
-								color="#1D1C1B"
-							>
-								{board.title}
-							</Text>
-						</Flex>
-						<Divider color="#1D1C1B" bg="#1D1C1B" />
-						<Button onClick={() => setBoard(board)}>Create new Column</Button>
-						<HStack alignItems="flex-start" w="100%" spacing={5}>
-							{data &&
-								data.success &&
-								data.data.length !== 0 &&
-								data.data.map((item, i) => (
-									<KanbanColumn column={item} key={i}></KanbanColumn>
-								))}
-						</HStack>
-					</VStack>
-				</BoxWrapper>
-			</DragDropContext>
-			<CreateColumnModal
-				board={selectedBoard}
-				onClose={() => {
-					setBoard(null);
-				}}
-			/>
-		</>
-	);
-};
-
-type KanbanColumnProps = {
-	column: ColumnAttributes;
-};
-
-const KanbanColumn: React.FC<KanbanColumnProps> = ({ column }) => {
-	const { id, name, amount, tasks } = column;
-	const [open, setOpen] = React.useState<ColumnAttributes | null>(null);
-	return (
-		<>
-			<Box
-				w="280px"
-				h="auto"
-				bg="#FFFFFF"
-				borderRadius="10px"
-			>
-				<Box>
-					<VStack
-						p="10px"
-						sx={{
-							"& > *": {
-								width: "100%",
-							},
-						}}
-						spacing={2}
-					>
-						<Flex justifyContent="space-between" alignItems="center" h="100%">
-							<Text color="#1D1C1B" fontWeight="bold">
-								{name}
-							</Text>
-							<Center
-								h="32px"
-								w="32px"
-								border="1px solid var(--background-primary)"
-								borderRadius="5px"
-								color="white"
-							>
-								{amount}
-							</Center>
-						</Flex>
-						<Button
-							w="100%"
-							bg="var(--background-primary)"
-							onClick={() => setOpen(column)}
-						>
-							<Plus color="var(--background-secondary-alt)" />
-						</Button>
-						<Droppable droppableId={id.toString()}>
-							{(
-								provided: DroppableProvided,
-								snapshot: DroppableStateSnapshot
-							) => (
-								<VStack ref={provided.innerRef} {...provided.droppableProps} color="#1D1C1B">
-									{tasks &&
-										tasks.length !== 0 &&
-										tasks.map((item, i) => (
-											<Draggable
-												key={item.id}
-												draggableId={item.id.toString()}
-												index={i}
-											>
-												{(
-													providedDraggable: DraggableProvided,
-													snapshotDraggable: DraggableStateSnapshot
-												) => (
-													<KanbanTask
-														date={"Jun 24"}
-														content={item.name}
-														providedDraggable={providedDraggable}
-													/>
-												)}
-											</Draggable>
-										))}
-									{provided.placeholder}
-								</VStack>
-							)}
-						</Droppable>
-					</VStack>
-				</Box>
-			</Box>
-
-			<CreateTaskModal column={open} onClose={() => setOpen(null)} />
-		</>
-	);
-};
-
-type KanbanTaskProps = {
-	date: string;
-	content: string;
-
-	providedDraggable: DraggableProvided;
-};
-
-const KanbanTask: React.FC<KanbanTaskProps> = ({
-	date,
-	content,
-	providedDraggable,
-}) => {
-	return (
-		<Box
-			ref={providedDraggable.innerRef}
-			{...providedDraggable.draggableProps}
-			{...providedDraggable.dragHandleProps}
-			style={{ ...providedDraggable.draggableProps.style }}
-			w="100%"
-			borderRadius="10px"
-			p="10px"
-			bg="var(--background-primary)"
-		>
-			<VStack>
-				<Flex w="100%" justifyContent="space-between" alignItems="center">
-					<Text fontSize="16px" fontWeight="bold" color="var(--text-primary)">
-						{date}
-					</Text>
-					<Avatar size="sm" />
-				</Flex>
-				<Text fontSize="md" color="#1D1C1B" textAlign="start" w="100%">
-					{content}
-				</Text>
-				<Flex
-					flexWrap="wrap"
-					alignItems="flex-start"
-					w="100%"
-					sx={{
-						"& > *": {
-							margin: "3px",
-						},
-					}}
+				<Droppable
+					droppableId="allCols"
+					type="column"
+					direction="horizontal"
 				>
-					<Tag size="sm">Sample</Tag>
-				</Flex>
-			</VStack>
-		</Box>
+					{(provided) => (
+						<div
+							{...provided.droppableProps}
+							ref={provided.innerRef}
+							className="flex w-full"
+						>
+							{data?.data.map((list, index) => (
+								// return <List key={index} data={list} />;
+								<Draggable draggableId={list.id.toString()} index={index}>
+									{(provided) => (
+										<div
+											{...provided.draggableProps}
+											ref={provided.innerRef}
+											className="mr-3"
+										>
+											<div className="h-full" style={{ width: "16rem" }}>
+												<div
+													{...provided.dragHandleProps}
+													className="px-2 py-2 flex sticky bg-base-200"
+													style={{ zIndex: 50, width: "16rem", top: "0px" }}
+												// style={{ width: "16rem" }}
+												>
+													<div className="flex items-center">
+														<span className="truncate text-base">
+															{`${list.name} ${list.tasks && list.tasks.length} ${list.tasks && list.tasks.length > 1 ? "Tareas" : "Tarea"
+																}`.toUpperCase()}
+														</span>
+													</div>
+												</div>
+												{/* </div> */}
+												<Droppable droppableId={list.id.toString()} type="task">
+													{(provided, snapshot) => (
+														<div
+															{...provided.droppableProps}
+															ref={provided.innerRef}
+															className={`p-2 ${snapshot.isDraggingOver ? "bg-base-300" : "bg-base-200"}`}
+															style={{ minHeight: "3em" }}
+														>
+															{list.tasks && list.tasks.length > 1 &&
+																list.tasks.map((task, taskIndex) => (
+																	<Draggable draggableId={task.id.toString()} index={taskIndex} key={taskIndex}>
+																		{(provided, snapshot) => (
+																			<div
+																				{...provided.draggableProps}
+																				{...provided.dragHandleProps}
+																				ref={provided.innerRef}
+																				className={`card shadow-sm mb-2 p-2 ${snapshot.isDragging ? "bg-base-200" : "bg-base-100"}`}
+																				data-bs-toggle="modal"
+																				data-bs-target="#cardModal"
+																			// onClick={() => setSelectedCard(data)}
+																			>
+																				<div className="card-body" style={{ height: "8rem" }}>
+																					<div className="flex items-center justify-between mb-2">
+																						<span
+																							// className={`badge ${renderPriorityStyle(data.priority)}`}
+																							style={{ fontSize: ".75em" }}
+																						>
+																							{/* {data.priority} */}
+																						</span>
+																						{/* <span className="fw-light">{formatToDate(data.createdAt)}</span> */}
+																					</div>
+																					<h4 className="truncate card-title">{task.id}</h4>
+																					<div className="flex items-center justify-between">
+																						<div className="flex items-center">
+																							{task.description && task.description !== "" && (
+																								<i className="bi bi-list"></i>
+																							)}
+																							{/* {task.comments.length > 0 && (
+																									<i className="bi bi-chat-left-dots me-1"></i>
+																								)} */}
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																		)}
+																	</Draggable>
+																))}
+															{provided.placeholder}
+														</div>
+													)}
+												</Droppable>
+												<div className="bg-base-200 mb-2">
+													<span>Añadir tarea</span>
+													{/* {!addTask ? (
+														<div
+														className="d-flex flex-grow-1 justify-content-center pb-2"
+															onClick={() => setAddTask(true)}
+															style={{ cursor: "pointer" }}
+														>
+														<span className="font-bold">
+														<i className="bi bi-plus"></i> Añadir tarea
+														</span>
+														</div>
+													) : (
+														<textarea
+														className="form-control mx-2 mb-2"
+														style={{ width: "93%" }}
+														placeholder="¿Qué se debe hacer?"
+														required
+															autoFocus
+															rows={3}
+															onChange={(e) => setNewCardName(e.target.value)}
+															onKeyPress={(e) => handleKeyPressed(e)}
+															/>
+														)} */}
+												</div>
+											</div>
+										</div>
+									)}
+								</Draggable>
+							))}
+							{provided.placeholder}
+							{!newList ? (
+								<div
+									className="flex align-center justify-center px-2 rounded bg-base-200 w-full sticky"
+									style={{
+										width: "16rem",
+										height: "4rem",
+										cursor: "pointer",
+										top: "0px",
+									}}
+									onClick={() => setNewList(true)}
+								>
+									<div
+										className="flex align-center"
+										style={{ width: "16em" }}
+									>
+										<i className="bi bi-plus"></i>
+										<span className="ms-2">Añadir nueva lista</span>
+									</div>
+								</div>
+							) : (
+								<form
+									className="ml-2 p-2 w-full"
+									onSubmit={handleSubmit(onSubmit)}
+								>
+									<input
+										type="text"
+										autoFocus
+										className={`${errors.title ? 'input-error ' : ''}input input-bordered w-full`}
+										placeholder="Añadir nueva columna"
+										{...register("title", {
+											required: {
+												value: true,
+												message: "El nombre es obligatorio",
+											},
+										})}
+										style={{ width: "16em" }}
+									/>
+									{errors.title && (
+										<label className="label">
+											<span className="label-text-alt text-error">El título es obligatorio</span>
+										</label>
+									)}
+								</form>
+							)}
+						</div>
+					)}
+				</Droppable>
+			</DragDropContext>
+		</div>
 	);
 };
 

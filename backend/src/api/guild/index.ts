@@ -258,6 +258,7 @@ router.post("/:guildId/events", async (req: Request, res: Response) => {
     return res.status(400).json({ message: e, success: false });
   }
 
+  console.log('event', { ...validatedEvent })
   const createdEvent = await Event.create({
     ...validatedEvent,
     guildId: parseInt(guildId),

@@ -1,76 +1,43 @@
-import { Center, HStack, Text, VStack } from '@chakra-ui/layout';
-import React from 'react';
-import { Box, useDisclosure } from '@chakra-ui/react';
+import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import { getBoards } from '../../api/board';
 import { useSelectedGuild } from '../../store/useSelectedGuild';
-import Button from '../../ui/Button';
-import BoxWrapper from '../shared/BoxWrapper';
 import CreateBoardModal from './CreateBoardModal';
 import { BoardAttributes } from '@tidify/common';
 import KanbanBoard from './KanbanBoard';
 
-interface Props { };
+const Boards: React.FC = () => {
+  const selectedGuild = useSelectedGuild((state) => state.selectedGuild);
+  const { data, isLoading } = useQuery(
+    "boards",
+    () => getBoards(selectedGuild?.id),
+    { enabled: !!selectedGuild }
+  );
 
-const Boards: React.FC<Props> = () => {
-    const disclosure = useDisclosure();
-    const { onOpen } = disclosure;
-    const selectedGuild = useSelectedGuild((state) => state.selectedGuild);
-    const { data, isLoading } = useQuery(
-        "boards",
-        () => getBoards(selectedGuild?.id),
-        { enabled: !!selectedGuild }
-    );
+  const [selectedBoard, selectBoard] = useState<BoardAttributes | null>(null);
 
-    const [selectedBoard, selectBoard] = React.useState<BoardAttributes | null>(null);
+  if (isLoading) return null;
 
-    if (isLoading) return null;
-
-    return (
-        <>
-            {!selectedBoard &&
-                <BoxWrapper>
-                    <VStack w="100%" spacing={5} alignItems="flex-start">
-                        <Button onClick={onOpen}>Create new Board</Button>
-                        <HStack>
-                            {data && data.success && data.data.map((b: BoardAttributes) => (
-                                <BoardBox key={b.id} title={b.title} onClick={() => selectBoard(b)} />
-                            ))}
-                        </HStack>
-                    </VStack>
-                </BoxWrapper>}
-            {selectedBoard && <KanbanBoard board={selectedBoard!} />}
-            <CreateBoardModal disclosure={disclosure} />
-        </>
-    );
-}
-
-type BoardBox = {
-    title: string;
-    onClick: () => void;
-}
-
-const BoardBox: React.FC<BoardBox> = ({ title, onClick }) => {
-    return (
-        <>
-            <Center
-                onClick={onClick}
-                w="150px"
-                h="100px"
-                bg="#FFFFFF"
-                borderRadius="10px"
-                transition="all 200ms ease-in-out"
-                sx={{
-                    "&:hover": {
-                        cursor: 'pointer',
-                        transform: 'scale(1.1)'
-                    }
-                }}
-            >
-                <Text color="#1D1C1B" fontWeight="bold">{title}</Text>
-            </Center>
-        </>
-    );
+  return (
+    <>
+      {!selectedBoard &&
+        <div className='flex flex-col w-full m-1'>
+          <label htmlFor="createBoardModal" className="btn btn-primary w-44 modal-button">Crear un nuevo tablero</label>
+          <div className='flex flex-wrap mt-10'>
+            {data && data.success && data.data.map((board: BoardAttributes, index: number) => (
+              <div className="card w-52 bg-base-200 shadow-md hover:scale-105 cursor-pointer" key={index} onClick={() => selectBoard(board)}>
+                <div className="card-body">
+                  <h2 className="card-title truncate">{board.title}</h2>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      }
+      {selectedBoard && <KanbanBoard board={selectedBoard!} />}
+      <CreateBoardModal />
+    </>
+  );
 }
 
 export default Boards;
