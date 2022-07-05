@@ -75,7 +75,6 @@ router.post("/login", async (req: Request, res: Response) => {
     );
   }
 
-  console.log("req.session.login", req.session);
   // res.cookie("test", userSession, { httpOnly: false });
   return res.status(200).json({
     data: userSession,

@@ -59,8 +59,10 @@ router.post("/:columnId/tasks", async (req: Request, res: Response) => {
  * @route {PUT} /api/v1/columns/:columnId/columns/:columnId
  */
 router.put(
-  "/columns/:columnId/columns/:columnId",
-  async (req: Request, res: Response) => {}
+  "/columns",
+  async (req: Request, res: Response) => {
+
+  }
 );
 
 /**
@@ -69,5 +71,5 @@ router.put(
  */
 router.delete(
   "/columns/h:columnId/columns/:columnId",
-  async (req: Request, res: Response) => {}
+  async (req: Request, res: Response) => { }
 );

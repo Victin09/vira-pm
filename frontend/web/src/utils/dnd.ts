@@ -1,12 +1,21 @@
-import { TaskAttributes as Task } from '@tidify/common'
+import { ColumnAttributes, TaskAttributes as Task } from '@tidify/common'
 import {
     DraggableLocation,
 } from 'react-beautiful-dnd';
 
-export const reorder = (list: Task[], startIndex: number, endIndex: number): Task[] => {
+export const reorderTaks = (list: Task[], startIndex: number, endIndex: number): Task[] => {
     const result = [...list];
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
+
+    return result;
+};
+
+export const reorderColumns = (lists: ColumnAttributes[], startIndex: number, endIndex: number): ColumnAttributes[] => {
+    const result = [...lists];
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+    result.map((item, index) => (item.order = index));
 
     return result;
 };

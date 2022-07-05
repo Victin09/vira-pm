@@ -34,9 +34,9 @@ const Overview: React.FC = () => {
 		<div className="flex flex-col items-center justify-center w-full m-1">
 			<h1 className="font-bold text-xl">Bienvenido a {selectedGuild?.name}</h1>
 			<span>¿Qué quieres hacer hoy?</span>
-			<div className="flex flex-wrap mt-3">
+			<div className="flex flex-wrap items-center justify-center mt-3">
 				{options.map((option, index) => (
-					<div className="card w-72 bg-base-200 shadow-md m-1 hover:scale-105 cursor-pointer" key={index}
+					<div className="card w-72 h-36 bg-base-200 shadow-md m-1 hover:scale-105 cursor-pointer" key={index}
 						onClick={() => select(option.value)}>
 						<div className="card-body">
 							<h2 className="card-title">{option.name}</h2>
