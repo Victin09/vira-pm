@@ -4,9 +4,9 @@ import React from "react";
 import ConfirmCode from "./ConfirmCode";
 import AuthFormWrapper from "./AuthFormWrapper";
 import { VStack, Text, HStack } from "@chakra-ui/react";
-import Button from '../../ui/Button';
+import Button from "../../ui/Button";
 import { useMe } from "../../hooks/useMe";
-import Loader from "../shared/Loader";
+import { Loader } from "../shared/Loader";
 import { useMutation } from "react-query";
 import { login } from "../../api/auth";
 import FormInput from "./FormInput";
@@ -38,7 +38,7 @@ const Login: React.FC = () => {
   if (isLoading) return <Loader />;
 
   if (data.success) {
-    navigate("/app")
+    navigate("/app");
   }
 
   return (

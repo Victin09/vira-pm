@@ -48,16 +48,6 @@ const MyCalendar: React.FC = () => {
       toolbar.onNavigate("TODAY");
     };
 
-    const label = () => {
-      const date = moment(toolbar.date);
-      return (
-        <span>
-          <b>{date.format("MMMM")}</b>
-          <span> {date.format("YYYY")}</span>
-        </span>
-      );
-    };
-
     return (
       <div className="flex justify-between items-center">
         <div className="flex m-1">
@@ -109,15 +99,7 @@ const MyCalendar: React.FC = () => {
     );
   };
 
-  // const ColoredDateCellWrapper = ({ children, value }: any) => {
-  //   console.log("values", value);
-  //   return <div className="bg-primary"></div>;
-  // };
-
   const ColoredDateCellWrapper = ({ children, value }: any) => {
-    console.log("new Date", formatToDate(new Date()));
-    console.log("value", formatToDate(value));
-    console.log("-------------");
     const isToday = formatToDate(new Date()) === formatToDate(value);
     const dayBg = `${isToday ? "bg-info" : "bg-base-100"}`;
     return (
@@ -169,7 +151,8 @@ const MyCalendar: React.FC = () => {
         className: "bg-success font-semibold rounded outline-none border-none",
       }),
       ...(isSelected && {
-        className: "bg-info font-semibold rounded outline-none border-none",
+        className:
+          "bg-secondary font-semibold rounded outline-none border-none",
       }),
     }),
     []
