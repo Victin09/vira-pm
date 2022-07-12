@@ -40,7 +40,10 @@ router.post("/:columnId/tasks", async (req: Request, res: Response) => {
   }
 
   const createdTask = await Task.create({
-    ...validatedEvent,
+    name: validatedEvent.name,
+    order: validatedEvent.order,
+    priority: "NORMAL",
+    description: validatedEvent.description ?? '',
     colId: parseInt(columnId),
     userId,
   });

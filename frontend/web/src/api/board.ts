@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ColumnAttributes } from "@tidify/common";
+import { ColumnAttributes, TaskAttributes } from "@tidify/common";
 import { BASE_URL } from "../constants";
 
 export const getBoards = async (guildId?: number) => {
@@ -19,6 +19,7 @@ export const createBoard = async (data: { title: string, guildId: number }) => {
 }
 
 export const getColumns = async (boardId: number) => {
+    console.log('getColumn called')
     const response = await axios.get(`${BASE_URL}/api/v1/boards/${boardId}/columns`, { withCredentials: true });
     return response.data;
 }
@@ -35,6 +36,16 @@ export const createColumn = async (data: Omit<ColumnAttributes, "id" | "amount" 
 
 export const updateColumns = async (data: { columns: ColumnAttributes[], boardId: number }) => {
     const response = await axios.put(`${BASE_URL}/api/v1/boards/${data.boardId}/columns`, { columns: data.columns }, {
+        headers: {
+            "Content-Type": "application/json",
+        },
+        withCredentials: true
+    });
+    return response.data;
+}
+
+export const updateTasks = async (data: { tasks: TaskAttributes[], boardId: number }) => {
+    const response = await axios.put(`${BASE_URL}/api/v1/boards/${data.boardId}/tasks`, { tasks: data.tasks }, {
         headers: {
             "Content-Type": "application/json",
         },

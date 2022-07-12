@@ -1,5 +1,5 @@
 import React from "react";
-import { RouteProps, Route, Navigate, Outlet } from "react-router-dom";
+import { RouteProps, Navigate, Outlet } from "react-router-dom";
 import Loader from "../shared/Loader";
 import { useMe } from "../../hooks/useMe";
 
@@ -9,6 +9,7 @@ interface Props extends RouteProps {
 
 const PrivateRoute: React.FC<Props> = ({ excludedRoles, ...rest }) => {
   const { data, isLoading } = useMe();
+  console.log('dataMe', data)
   if (isLoading) {
     return <Loader />;
   }

@@ -60,65 +60,20 @@ const CreateBoardModal: React.FC = () => {
   }
 
   return (
-    // <>
-    //   <Modal isOpen={isOpen!} onClose={onClose!} isCentered >
-    //     <ModalOverlay />
-    //     <ModalContent bg="var(--background-secondary)">
-    //       <ModalHeader color="white">Create new Board</ModalHeader>
-    //       <ModalCloseButton />
-    //       <ModalBody
-    //         paddingBottom="24px"
-    //       >
-    //         <Formik
-    //           initialValues={{ title: '' }}
-    //           onSubmit={(values, { setSubmitting }) => {
-    //             setSubmitting(true);
-    //             mutation.mutate({ title: values.title, guildId: selectedGuild!.id });
-
-    //             onClose && onClose();
-    //             setSubmitting(false);
-    //           }}
-    //         >
-    //           {({ isSubmitting, errors, touched }) => (
-    //             <Form>
-    //               <FormInput
-    //                 isInvalid={!!errors.title && touched.title}
-    //                 name="title" type="text" placeholder="name"
-    //                 errorMessage={errors.title}
-    //                 label="Board name"
-    //               />
-    //               <Button
-    //                 w="100%"
-    //                 mt={4}
-    //                 bg="var(--background-secondary-alt)"
-    //                 isLoading={isSubmitting}
-    //                 type="submit"
-    //                 color="var(--text-primary)"
-    //               >
-    //                 Submit
-    //               </Button>
-    //             </Form>
-    //           )}
-    //         </Formik>
-    //       </ModalBody>
-
-    //     </ModalContent>
-    //   </Modal>
-    // </>
     <>
       <input type="checkbox" id="createBoardModal" className="modal-toggle" />
       <label htmlFor="createBoardModal" className="modal cursor-pointer">
         <label className="modal-box relative" htmlFor="">
-          <h3 className="text-lg font-bold">Congratulations random Internet user!</h3>
+          <h3 className="text-lg font-bold">Crear un nuevo tablero!</h3>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="form-control w-full">
               <label className="label">
-                <span className="label-text">Título</span>
+                <span className="label-text">Nombre</span>
               </label>
-              <input className={`${errors.title ? 'input-error ' : ''}input input-bordered w-full`} placeholder="Evento uno" {...register('title', { required: true })} />
+              <input className={`${errors.title ? 'input-error ' : ''}input input-bordered w-full`} placeholder="Tablero uno" {...register('title', { required: true })} />
               {errors.title && (
                 <label className="label">
-                  <span className="label-text-alt text-error">El título es obligatorio</span>
+                  <span className="label-text-alt text-error">El nombre es obligatorio</span>
                 </label>
               )}
             </div>

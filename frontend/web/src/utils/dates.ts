@@ -34,3 +34,10 @@ export const addHoursAndMinutesToDate = (hoursAndMinutes: string, date: Date) =>
 
   return date
 }
+
+export const formatToDate = (date: Date) => {
+  const year = date.getFullYear()
+  const month = date.getMonth()
+  const day = date.getDay()
+  return `${day} - ${month} - ${year}`
+}

@@ -7,61 +7,65 @@ import { useSelectedGuild } from "../../store/useSelectedGuild";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 import useOnClickOutside from "../../hooks/useClickOutside";
-import 'react-modern-calendar-datepicker/lib/DatePicker.css';
-import DatePicker, { DayValue, DayRange, Day } from 'react-modern-calendar-datepicker'
+import "react-modern-calendar-datepicker/lib/DatePicker.css";
+import DatePicker, {
+  DayValue,
+  DayRange,
+  Day,
+} from "react-modern-calendar-datepicker";
 import { addHoursAndMinutesToDate, generateDateHours } from "../../utils/dates";
 
 interface Props {
   currentDate: Date;
-  handleClick: () => void
+  handleClick: () => void;
 }
 const myCustomLocale = {
   // months list by order
   months: [
-    'Enero',
-    'Febrero',
-    'Marzo',
-    'Abril',
-    'Mayo',
-    'Junio',
-    'Julio',
-    'Agosto',
-    'Septiembre',
-    'Octubre',
-    'Noviembre',
-    'Diciembre',
+    "Enero",
+    "Febrero",
+    "Marzo",
+    "Abril",
+    "Mayo",
+    "Junio",
+    "Julio",
+    "Agosto",
+    "Septiembre",
+    "Octubre",
+    "Noviembre",
+    "Diciembre",
   ],
 
   // week days by order
   weekDays: [
     {
-      name: 'Lunes',
-      short: 'L',
+      name: "Lunes",
+      short: "L",
     },
     {
-      name: 'Martes',
-      short: 'M',
+      name: "Martes",
+      short: "M",
     },
     {
-      name: 'Miercoles',
-      short: 'X',
+      name: "Miercoles",
+      short: "X",
     },
     {
-      name: 'Jueves',
-      short: 'J',
+      name: "Jueves",
+      short: "J",
     },
     {
-      name: 'Viernes',
-      short: 'V',
+      name: "Viernes",
+      short: "V",
     },
     {
-      name: 'Sabado',
-      short: 'S',
+      name: "Sabado",
+      short: "S",
       isWeekend: true,
     },
     {
-      name: 'Domingo', // used for accessibility 
-      short: 'D', // displayed at the top of days' rows
+      name: "Domingo", // used for accessibility
+      short: "D", // displayed at the top of days' rows
       isWeekend: true, // is it a formal weekend or not?
     },
   ],
@@ -90,43 +94,47 @@ const myCustomLocale = {
   },
 
   // texts in the date picker
-  nextMonth: 'Siguiente mes',
-  previousMonth: 'Mes anterior',
-  openMonthSelector: 'Abre el selector de meses',
-  openYearSelector: 'Abre el selector de años',
-  closeMonthSelector: 'Cierra el selector de meses',
-  closeYearSelector: 'Cierra el selector de años',
-  defaultPlaceholder: 'Selcciona una fecha...',
+  nextMonth: "Siguiente mes",
+  previousMonth: "Mes anterior",
+  openMonthSelector: "Abre el selector de meses",
+  openYearSelector: "Abre el selector de años",
+  closeMonthSelector: "Cierra el selector de meses",
+  closeYearSelector: "Cierra el selector de años",
+  defaultPlaceholder: "Selcciona una fecha...",
 
   // for input range value
-  from: 'from',
-  to: 'to',
-
+  from: "from",
+  to: "to",
 
   // used for input value when multi dates are selected
-  digitSeparator: ',',
+  digitSeparator: ",",
 
   // if your provide -2 for example, year will be 2 digited
   yearLetterSkip: 0,
 
   // is your language rtl or ltr?
   isRtl: false,
-}
+};
 
-const CreateEventModal: React.FC<Props> = ({
-  currentDate,
-  handleClick
-}) => {
-  const ref = useRef<HTMLDivElement>(null)
-  const [day, setDay] = useState<DayValue>({ day: currentDate.getDate(), month: currentDate.getMonth() + 1, year: currentDate.getFullYear() });
-  const [startHours, setStartHours] = useState<string>('')
-  const [endHours, setEndHours] = useState<string>('')
-  const [loading, setLoading] = useState<boolean>(false)
+const CreateEventModal: React.FC<Props> = ({ currentDate, handleClick }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [day, setDay] = useState<DayValue>({
+    day: currentDate.getDate(),
+    month: currentDate.getMonth() + 1,
+    year: currentDate.getFullYear(),
+  });
+  const [startHours, setStartHours] = useState<string>("");
+  const [endHours, setEndHours] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const queryClient = useQueryClient();
-  const selectedGuild = useSelectedGuild(state => state.selectedGuild);
-  const { register, handleSubmit, formState: { errors } } = useForm<{ title: string, startDate: Date, endDate: Date }>()
+  const selectedGuild = useSelectedGuild((state) => state.selectedGuild);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<{ title: string; startDate: Date; endDate: Date }>();
 
-  useOnClickOutside(ref, handleClick)
+  useOnClickOutside(ref, handleClick);
 
   const mutation = useMutation(createEvent, {
     onMutate: (data: Omit<EventAttributes, "id">) => {
@@ -162,37 +170,57 @@ const CreateEventModal: React.FC<Props> = ({
       }
     },
     onSettled: () => queryClient.invalidateQueries("events"),
-    onSuccess: handleClick
+    onSuccess: handleClick,
   });
 
   const onSubmit: SubmitHandler<{ title: string }> = (data) => {
-    const startDate = addHoursAndMinutesToDate(startHours, new Date(day!.year, day!.month - 1, day!.day))
-    const endDate = addHoursAndMinutesToDate(endHours, new Date(day!.year, day!.month - 1, day!.day))
+    const startDate = addHoursAndMinutesToDate(
+      startHours,
+      new Date(day!.year, day!.month - 1, day!.day)
+    );
+    const endDate = addHoursAndMinutesToDate(
+      endHours,
+      new Date(day!.year, day!.month - 1, day!.day)
+    );
     mutation.mutate({
       guildId: selectedGuild!.id,
       title: data.title,
       start: startDate,
-      end: endDate
-    })
-    setLoading(true)
-  }
+      end: endDate,
+    });
+    setLoading(true);
+  };
 
   return (
     <>
       <input type="checkbox" id="createEventModal" className="modal-toggle" />
       <div className="modal modal-open">
         <div className="modal-box relative overflow-y-visible" ref={ref}>
-          <label htmlFor="createEventModal" className="btn btn-sm btn-circle absolute right-2 top-2" onClick={handleClick}>✕</label>
+          <label
+            htmlFor="createEventModal"
+            className="btn btn-sm btn-circle absolute right-2 top-2"
+            onClick={handleClick}
+          >
+            ✕
+          </label>
           <h3 className="text-lg font-bold">Crea un evento en el calendario</h3>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="form-control w-full">
               <label className="label">
                 <span className="label-text">Título</span>
               </label>
-              <input className={`${errors.title ? 'input-error ' : ''}input input-bordered w-full`} placeholder="Evento uno" {...register('title', { required: true })} />
+              <input
+                className={`${
+                  errors.title ? "input-error " : ""
+                }input input-bordered w-full`}
+                placeholder="Evento uno"
+                {...register("title", { required: true })}
+              />
               {errors.title && (
                 <label className="label">
-                  <span className="label-text-alt text-error">El título es obligatorio</span>
+                  <span className="label-text-alt text-error">
+                    El título es obligatorio
+                  </span>
                 </label>
               )}
             </div>
@@ -204,19 +232,26 @@ const CreateEventModal: React.FC<Props> = ({
                 <DatePicker
                   locale={myCustomLocale}
                   shouldHighlightWeekends
+                  wrapperClassName="text-base-content"
                   calendarClassName="bg-base-200"
                   calendarSelectedDayClassName="rounded bg-primary"
                   value={day}
                   onChange={setDay}
-                  inputClassName="input text-left" />
+                  inputClassName="input text-left"
+                />
               </div>
               <div className="form-control w-full max-w-xs">
                 <label className="label">
                   <span className="label-text">Hora de inicio</span>
                 </label>
-                <select className="select" onChange={(e) => setStartHours(e.target.value)}>
+                <select
+                  className="select"
+                  onChange={(e) => setStartHours(e.target.value)}
+                >
                   {generateDateHours().map((hour, index) => (
-                    <option value={hour} key={index}>{hour}</option>
+                    <option value={hour} key={index}>
+                      {hour}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -224,14 +259,26 @@ const CreateEventModal: React.FC<Props> = ({
                 <label className="label">
                   <span className="label-text">Hora final</span>
                 </label>
-                <select className="select" onChange={(e) => setEndHours(e.target.value)}>
+                <select
+                  className="select"
+                  onChange={(e) => setEndHours(e.target.value)}
+                >
                   {generateDateHours().map((hour, index) => (
-                    <option value={hour} key={index}>{hour}</option>
+                    <option value={hour} key={index}>
+                      {hour}
+                    </option>
                   ))}
                 </select>
               </div>
             </div>
-            <button type="submit" className={`btn btn-primary w-full mt-2${loading ? ' loading' : ''}`}>{loading ? 'Cargando' : 'Crear'}</button>
+            <button
+              type="submit"
+              className={`btn btn-primary w-full mt-2${
+                loading ? " loading" : ""
+              }`}
+            >
+              {loading ? "Cargando" : "Crear"}
+            </button>
           </form>
         </div>
       </div>
@@ -240,4 +287,3 @@ const CreateEventModal: React.FC<Props> = ({
 };
 
 export default CreateEventModal;
-

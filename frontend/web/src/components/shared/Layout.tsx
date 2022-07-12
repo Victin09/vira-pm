@@ -1,17 +1,9 @@
-import styled from "styled-components";
-
-const LayoutWrapper = styled.div`
-  display: flex;
-  height: 100%;
-  width: 100%;
-`
-
 const Layout: React.FC = ({ children }) => {
   return (
-    <LayoutWrapper>
+    <div className="flex w-full h-full overflow-hidden bg-base-100 text-base-content">
       {children}
-    </LayoutWrapper>
+    </div>
   );
-}
+};
 
 export default Layout;
