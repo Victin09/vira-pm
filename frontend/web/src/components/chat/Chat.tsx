@@ -1,32 +1,22 @@
-import { Flex,} from "@chakra-ui/layout";
 import { ChannelAttributes } from "@tidify/common";
 import { useSelectedChannel } from "../../store/useSelectedChannel";
 import ChatArea from "./ChatArea";
-import Members from "../shared/Members";
-import Title from "./Title";
+import ChatSidebar from "./ChatSidebar";
 
-export interface Props { };
+export interface Props {}
 
 const Chat: React.FC<Props> = () => {
-    const selectedChannel = useSelectedChannel(state => state.selectedChannel) as ChannelAttributes;
-    return (
-        <Flex
-            w="100%"
-            h="100%"
-        >
-            <Flex
-                flex="4"
-                h="100%"
-                w="100%"
-                flexDirection="column"
-                p="10px"
-            >
-                <Title name={selectedChannel.name} />
-                <ChatArea />
-            </Flex>
-            <Members />
-        </Flex>
-    );
-}
+  const selectedChannel = useSelectedChannel(
+    (state) => state.selectedChannel
+  ) as ChannelAttributes;
+
+  return (
+    <div className="flex w-full h-full">
+      {/* Project Members */}
+      <ChatSidebar />
+      <h1>{selectedChannel.name}</h1>
+    </div>
+  );
+};
 
 export default Chat;

@@ -79,6 +79,9 @@ const Navigation: React.FC = () => {
                 <li>
                   <a onClick={() => select("kanban")}>Kanban</a>
                 </li>
+                <li>
+                  <a onClick={() => select("chat")}>Chat</a>
+                </li>
               </ul>
             </div>
           )}
@@ -131,10 +134,7 @@ const Navigation: React.FC = () => {
           </SidenavUserIcons> */}
         </div>
       </div>
-      <CreateGuildModal
-        showModal={displayCreateGuildModal}
-        setShowModal={handleAddGuild}
-      />
+      <CreateGuildModal />
     </>
   );
 };

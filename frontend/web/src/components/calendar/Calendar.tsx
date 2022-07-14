@@ -111,36 +111,8 @@ const MyCalendar: React.FC = () => {
     );
   };
 
-  // const EventWrapperContent: React.FC<EventWrapperProps> = ({ event, onClick, accessors, className, continuesEarlier, continuesLater, getters, isRtl, label, onDoubleClick, selected, children }) => {
-  //   console.log('event', event)
-  //   console.log('selected', selected)
-  //   // console.log('title', title)
-
-  //   const ref = useRef<HTMLDivElement>(null)
-  //   const [eventSelected, setEventSelected] = useState<boolean>(selected)
-
-  //   const handleClickOutside = () => {
-  //     setEventSelected(false)
-  //   }
-
-  //   useOnClickOutside(ref, handleClickOutside)
-
-  //   return (
-  //     <div ref={ref} className={` p-1 rounded text-primary-content w-full`} onClick={() => setEventSelected(!eventSelected)}>
-  //       {eventSelected && (<span className="badge">Elected</span>)}
-  //       <span className="font-bold">{event.title}</span>
-  //       <div >
-  //         {children}
-  //       </div>
-  //     </div >
-  //   )
-  // }
-
-  /**
-   * TODO: Fix dates
-   */
   const eventPropGetter = useCallback(
-    (event, start, end, isSelected) => ({
+    (_, start, end, isSelected) => ({
       ...{
         className: "bg-primary font-semibold rounded outline-none border-none",
       },
@@ -189,11 +161,6 @@ const MyCalendar: React.FC = () => {
             header: HeaderCellContent,
             toolbar: ToolbarContent,
             dateCellWrapper: ColoredDateCellWrapper,
-            // eventWrapper: ({ event, onClick, accessors, className, continuesEarlier, continuesLater, getters, isRtl, label, onDoubleClick, selected, children }) => (
-            //   <EventWrapperContent event={event} onClick={onClick} accessors={accessors} className={className}
-            //     continuesEarlier={continuesEarlier} continuesLater={continuesLater} getters={getters}
-            //     isRtl={isRtl} label={label} onDoubleClick={onDoubleClick} selected={selected}>{children}</EventWrapperContent>
-            // ),
           }}
         />
       </div>

@@ -28,6 +28,11 @@ const Overview: React.FC = () => {
       description: "Un tablero en el que puedes orgarnizar el trabajo",
       value: "kanban",
     },
+    {
+      name: "Chat",
+      description: "Un chat para hablar con los miembros del proyecto",
+      value: "chat",
+    },
   ];
 
   return (

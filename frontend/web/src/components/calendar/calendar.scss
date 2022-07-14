@@ -17,3 +17,12 @@
 .rbc-agenda-time-cell .rbc-continues-after:after {
   content: '' !important;
 }
+
+.rbc-today {
+  background-color: transparent !important;
+}
+
+.rbc-day-slot .rbc-events-container {
+  // margin-left: .15em;
+  margin-right: 0 !important;
+}

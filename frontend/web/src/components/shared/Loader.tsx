@@ -1,9 +1,12 @@
 export const Loader: React.FC = () => {
   return (
-    <div className="flex items-center justify-center w-full h-full opacity-5 bg-base-100">
+    <div
+      className="flex items-center justify-center w-full h-full fixed bg-base-100 bg-opacity-75"
+      style={{ zIndex: 1000 }}
+    >
       <svg
         role="status"
-        className="w-8 h-8 mr-2 text-base-content animate-spin  fill-primary"
+        className="w-8 h-8 mr-2 text-gray-200 animate-spin fill-primary"
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
